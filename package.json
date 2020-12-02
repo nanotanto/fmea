@@ -30,7 +30,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "dependencies": {
-    "webix": "^6.3.0",
+    "webix": "^8.0.1",
     "webix-jet": "^2.0.0"
   }
 }
