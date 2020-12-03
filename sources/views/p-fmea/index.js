@@ -1,4 +1,5 @@
 import {JetView} from "webix-jet";
+import {data_product} from "models/products";
 
 export default class IndexView extends JetView{
 	config(){
@@ -15,14 +16,26 @@ export default class IndexView extends JetView{
                     ]
                 },
                 {
-                    //"url": "demo->5fc44d5824ab0800183e97c9",
+                    id:"tbl_fmea",
+                    "view": "datatable", 
                     "columns": [
                         { "id": "number", "header": "P-FMEA ID Number", "fillspace": false, "hidden": false, "width": 200 },
-                        { "id": "product", "header": "Product Name", "fillspace": true, "hidden": false },
-                        { "id": "prepared", "header": "Prepared By", "fillspace": false, "hidden": false, "width": 200 },
+                        { "id": "name", "header": "Product Name", "fillspace": true, "hidden": false },
+                        { "id": "issued", "header": "Prepared By", "fillspace": false, "hidden": false, "width": 200 },
                         { "id": "action", "header": "", "fillspace": false, "hidden": false, "width": 100 }
                     ],
-                    "view": "datatable"
+                    data: data_product,
+                    select:true,
+                    on:{
+                        "onAfterSelect":function(){
+                            $$("btn_planning").enable();
+                            $$("btn_structure").enable();
+                            $$("btn_failure").enable();
+                            $$("btn_risk").enable();
+                            $$("btn_optimization").enable();
+                        }
+                    }
+
                 },
                 {
                     "css": "webix_dark",
@@ -30,19 +43,22 @@ export default class IndexView extends JetView{
                     "height": 34,
                     "cols": [
                         { "view": "label", "label": "Set up", "align": "center" },
-                        { "label": "Planning & Preparation", "view": "button", "height": 32,
-                            click: "location.href='#!/top/p-fmea.planning'"
+                        { id:"btn_planning", "label": "Planning & Preparation", "view": "button", "height": 32, disabled:true,
+                        click: () => {
+                            const id = $$("tbl_fmea").getSelectedId();
+                            this.app.show("/top/p-fmea.planning?id="+id);
+                        }
                         },
-                        { "label": "Structure & Function Analysis", "view": "button", "height": 32,
+                        { id:"btn_structure", "label": "Structure & Function Analysis", "view": "button", "height": 32, disabled:true,
                             click: "location.href='#!/top/p-fmea.structure'"
                         },
-                        { "label": "Failure Analysis", "view": "button", "height": 32,
+                        { id:"btn_failure", "label": "Failure Analysis", "view": "button", "height": 32, disabled:true,
                             click: "location.href='#!/top/p-fmea.mode'"
                         },
-                        { "label": "Risk Analysis", "view": "button", "height": 32,
+                        { id:"btn_risk", "label": "Risk Analysis", "view": "button", "height": 32, disabled:true,
                             click: "location.href='#!/top/p-fmea.risk'"
                         },
-                        { "label": "Optimization", "view": "button", "height": 32,
+                        { id:"btn_optimization", "label": "Optimization", "view": "button", "height": 32, disabled:true,
                             click: "location.href='#!/top/p-fmea.optimization'"
                         }
                     ],                    
@@ -50,5 +66,5 @@ export default class IndexView extends JetView{
                 }
 			]
 		}
-	}
+    }    
 }

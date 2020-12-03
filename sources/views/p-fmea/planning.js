@@ -15,7 +15,9 @@ export default class PlanningView extends JetView{
                         }
                     ]
                 },
-                {
+                {   
+                    "id":"form_planning",
+                    url:"http://localhost/products/show/1",
                     "autoheight": false,
                     "view": "form",
                     "rows": [
@@ -23,10 +25,10 @@ export default class PlanningView extends JetView{
                             "cols": [
                                 {
                                     "rows": [
-                                        { "label": "P-FMEA ID Number", "view": "text", "labelPosition": "top" },
+                                        { name:"number", "label": "P-FMEA ID Number", "view": "text", "labelPosition": "top" },
                                         { "label": "Product Code", "view": "text", "labelPosition": "top" },
-                                        { "label": "Product Name", "view": "text", "labelPosition": "top" },
-                                        { "label": "Prepared By", "view": "text", "labelPosition": "top" },
+                                        { name:"name", "label": "Product Name", "view": "text", "labelPosition": "top" },
+                                        { name:"issued", "label": "Prepared By", "view": "text", "labelPosition": "top" },
                                         { "label": "Company Name", "view": "text", "labelPosition": "top" },
                                         { "label": "Manufacture Location", "view": "text", "labelPosition": "top" },
                                         { "label": "Customer Name", "view": "text", "labelPosition": "top" },
