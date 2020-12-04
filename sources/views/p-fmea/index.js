@@ -1,5 +1,4 @@
 import {JetView} from "webix-jet";
-import {data_product} from "models/products";
 
 export default class IndexView extends JetView{
 	config(){
