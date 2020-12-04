@@ -16,6 +16,7 @@ export default class OptimizationView extends JetView{
                     ]
                 },
                 {
+                    id:"form_planning",
                     "autoheight": false,
                     "view": "form",
                     "rows": [
@@ -23,23 +24,24 @@ export default class OptimizationView extends JetView{
                             "cols": [
                                 {
                                     "rows": [
-                                        { "label": "P-FMEA ID Number", "view": "text", "labelWidth": 150, "height": 0 },
-                                        { "label": "Product Code", "view": "text", "labelWidth": 150, "height": 0 },
-                                        { "label": "Product Name", "view": "text", "labelWidth": 150, "height": 0 }
+                                        { id:"id", name:"id", "label": "ID", "view": "text", "labelWidth": 150, "height": 0, hidden:true },
+                                        { name:"number", "label": "P-FMEA ID Number", "view": "text", "labelWidth": 150, "height": 0, readonly:true },
+                                        { name:"code", "label": "Product Code", "view": "text", "labelWidth": 150, "height": 0, readonly:true },
+                                        { name:"name", "label": "Product Name", "view": "text", "labelWidth": 150, "height": 0, readonly:true }
                                     ],
                                     "padding": { "right": 20 },
                                     "borderless": true
                                 },
                                 {
                                     "rows": [
-                                        { "label": "Model of Year/ Platform", "view": "text", "labelWidth": 150, "height": 0 },
-                                        { "label": "Subject", "view": "text", "labelWidth": 150, "height": 0 },
+                                        { name:"model", "label": "Model of Year/ Platform", "view": "text", "labelWidth": 150, "height": 0, readonly:true },
+                                        { name:"subject", "label": "Subject", "view": "text", "labelWidth": 150, "height": 0, readonly:true },
                                         {
-                                            "label": "P-FMEA Start Date",
+                                            name:"start_date", "label": "P-FMEA Start Date",
                                             "value": "2020-11-30 10:26:39",
                                             "view": "datepicker",
                                             "height": 0,
-                                            "labelWidth": 150
+                                            "labelWidth": 150, readonly:true
                                         }
                                     ],
                                     "padding": { "left": 20 },
@@ -133,11 +135,17 @@ export default class OptimizationView extends JetView{
                     "height": 35,
                     "cols": [
                         { "label": "Back", "view": "button", "height": 0, "width": 100,
-                            click: "location.href='#!/top/p-fmea.risk'"
+                            click: () => {
+                                var id = $$("id").getValue();;
+                                this.app.show("/top/p-fmea.risk?id="+id);
+                            }
                         },
                         { "view": "label" },
                         { "label": "Finish", "view": "button", "height": 0, "width": 100, "css": "webix_danger",
-                            click: "location.href='#!/top/p-fmea'"
+                        click: () => {
+                            var id = $$("id").getValue();;
+                            this.app.show("/top/p-fmea");
+                        }
                         }
                     ],
                     //"padding": { "left": 10, "right": 10 }
@@ -145,4 +153,8 @@ export default class OptimizationView extends JetView{
 			]
 		}
 	}
+    urlChange(view, url){
+        var id = url[0].params.id;
+        $$("form_planning").load("http://localhost/products/show/"+id);
+    }
 }

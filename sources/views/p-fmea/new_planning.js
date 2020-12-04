@@ -26,7 +26,7 @@ export default class PlanningView extends JetView{
                             "cols": [
                                 {
                                     "rows": [
-                                        { id:"id", name:"id", "label": "ID", "view": "text", "labelPosition": "top", hidden:true, },
+                                        { id:"id", name:"id", "label": "ID", "view": "text", "labelPosition": "top", hidden:true },
                                         { name:"number", "label": "P-FMEA ID Number", "view": "text", "labelPosition": "top"},
                                         { name:"code", "label": "Product Code", "view": "text", "labelPosition": "top"},
                                         { name:"name", "label": "Product Name", "view": "text", "labelPosition": "top"},
@@ -45,7 +45,7 @@ export default class PlanningView extends JetView{
                                         { name:"model","label": "Model of Year/ Platform", "view": "text", "labelPosition": "top"},
                                         { name:"subject","label": "Subject", "view": "text", "labelPosition": "top"},
                                         { name:"start_date","label": "P-FMEA Start Date", "value": "2020-11-30 10:26:39", "view": "datepicker", "labelPosition": "top"},
-                                        { name:"revision_date","label": "P-FMEA Revision Date", "value": "2020-11-30 10:26:39", "view": "datepicker", "labelPosition": "top" },
+                                        { name:"revision_date","label": "P-FMEA Revision Date", "value": "2020-11-30 10:26:39", "view": "datepicker", "labelPosition": "top", hidden:true },
                                         { name:"team","label": "Cross-Function Team", "view": "text", "labelPosition": "top"},
                                         { name:"respons","label": "Process Responsibility", "view": "text", "labelPosition": "top"},
                                         {
@@ -59,17 +59,21 @@ export default class PlanningView extends JetView{
                                         {
                                             "cols": [
                                                 { "view": "template", "role": "placeholder", "borderless": true },
-                                                { id:"btn_edit", "label": "Edit", "view": "button", "css": "webix_primary", "width": 100,
+                                                { id:"btn_save", "label": "Save", "view": "button", "css": "webix_primary", "width": 100,
                                                 click:function(){
                                                     var form = this.getFormView();
                                                     if (form.validate()){
-                                                        var id = $$("id").getValue();
                                                         var data = $$("form_planning").getValues();
-                                                        webix.confirm("Do you wont to edit data ?").then(function(result){
-                                                            webix.ajax().put("http://localhost/products/update/"+id, data).then(() => webix.message("Edited"));
-                                                            //$$("btn_edit").disable();
+
+                                                        webix.confirm("Do you wont to save data ?").then(function(result){
+                                                            webix.ajax().post("http://localhost/products/save", data).then(() => webix.message("Saved"))
+                                                            .then(()=>$$('form_planning').load("http://localhost/products/newFmea"));
+                                                            $$("btn_save").disable();
                                                         });
-                                                        
+                                                        // .fail(function(){
+                                                        //   webix.message("Cancel");
+                                                        // });
+
                                                         //webix.ajax().post(url+"../backend/lumen/public/saveLog", data)
                                                     }
                                                     else
@@ -100,6 +104,7 @@ export default class PlanningView extends JetView{
                         "subject":webix.rules.isNotEmpty,
                         "start_date":webix.rules.isNotEmpty,
                         "team":webix.rules.isNotEmpty,
+                        "respons":webix.rules.isNotEmpty,
                         "level":webix.rules.isNotEmpty
                     },
                     "padding": { "top": 30 }

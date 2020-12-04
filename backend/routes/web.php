@@ -19,11 +19,20 @@ $router->get('/key', function() {
     return \Illuminate\Support\Str::random(32);
 });
 
+$router->get('products/show/', function() {
+    return response()->json();
+});
+
 $router->get('actions', 'ActionController@index');
 $router->get('currents', 'CurrentController@index');
 $router->get('elements', 'ElementController@index');
 $router->get('modes', 'ModeController@index');
 $router->get('processes', 'ProcessController@index');
 $router->get('products', 'ProductController@index');
+
 $router->get('products/show/{id}', 'ProductController@show');
+$router->post('products/save', 'ProductController@add');
+$router->put('products/update/{id}', 'ProductController@update');
+$router->get('products/newFmea', 'ProductController@newFmea');
+
 $router->get('subprocesses', 'SubprocessController@index');
