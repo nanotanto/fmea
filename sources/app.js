@@ -7,7 +7,7 @@ export default class App extends JetApp{
 			id 		: APPNAME,
 			version : VERSION,
 			debug 	: !PRODUCTION,
-			start 	: "/top/start"
+			start 	: "/top/p-fmea"
 		};
 
 		super({ ...defaults, ...config });

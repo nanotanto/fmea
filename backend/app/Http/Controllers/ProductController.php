@@ -17,7 +17,7 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
-    public function add(Request $request)
+    public function save(Request $request)
     {
         Product::create($request->all());
     }
@@ -36,8 +36,12 @@ class ProductController extends Controller
         }else{
             $data->revision_date = $request->input("revision_date");
         }
-
         $data->save();
+    }
+
+    public function delete(Request $request, $id){
+        $data = Product::find($id);
+        $data->delete();
     }
 
 }

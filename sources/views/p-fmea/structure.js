@@ -1,6 +1,13 @@
 import {JetView} from "webix-jet";
 import ElementWinView from "views/p-fmea/elementWin";
 
+var saveProcess = webix.proxy("rest", "http://localhost:80/processes/save", {
+    meta: "csrf_field()", //some param
+    save:function(view, params){
+        params.data.meta = this.meta;
+        return webix.proxy.rest.save.call(this, view, params);
+    }
+});
 
 export default class StructureView extends JetView{
 	config(){
@@ -66,16 +73,46 @@ export default class StructureView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Process Item" },
-                                        { "view": "button", "label": "Add Process Item", "autowidth": true, "css": "webix_primary" }
+                                        { "view": "button", "label": "Add Process Item", "autowidth": true, "css": "webix_primary", click:function(){ 
+                                            var _id = $$('tbl_process_all').getLastId();
+                                            var product_id = $$("id").getValue();
+                                            var data = { id:_id+1, product_id:product_id }
+                                            $$('tbl_process').editStop();
+                                            var id = $$('tbl_process').add(data, 0);
+                                            $$("tbl_process_all").load("http://localhost/processes"); 
+                                            $$('tbl_process').editRow(id);                   
+                                        }}
                                     ]
                                 },
                                 {
-                                    //"url": "demo->5fc4769724ab0800183ea11e",
+                                    id:"tbl_process",
                                     "columns": [
-                                        { "id": "name", "header": "Process Item Name", "width": 200, "fillspace": false, "hidden": false },
-                                        { "id": "function", "header": "Function", "fillspace": true, "hidden": false }
+                                        { id:"id", hidden:true},
+                                        { id:"product_id", hidden:true},
+                                        { "id": "name", "header": "Process Item Name", "width": 200, editor:"text" },
+                                        { "id": "function", "header": "Function", "fillspace": true, editor:"text" },                        
+                                        {id:"trash", header:"", template:"{common.trashIcon()}", width:40}
                                     ],
-                                    "view": "datatable"
+                                    "view": "datatable",
+                                    responsive:true, 
+                                    select:true,
+                                    editable:true,
+                                    editaction:"dblclick",
+                                    save: saveProcess,
+                                    onClick:{
+                                        "wxi-trash":function(event, id, node){
+                                            webix.confirm("Are you sure want to delete data ?").then(function(result){
+                                                webix.ajax().post("http://localhost/processes/delete/"+id).then(() => webix.message("Deleted"));
+                                                $$("tbl_process").remove(id);
+                                            });
+                                        }
+                                    },
+                                },
+                                {
+                                    id:'tbl_process_all',
+                                    "view": "datatable",
+                                    columns:[{id:"id"}],
+                                    hidden:true,
                                 }
                             ]
                         },
@@ -138,10 +175,12 @@ export default class StructureView extends JetView{
         }
     }
     init(){
-        this.win = this.ui(ElementWinView);
+        this.win = this.ui(ElementWinView);        
+        $$("tbl_process_all").load("http://localhost/processes");
     }
     urlChange(view, url){
         var id = url[0].params.id;
         $$("form_planning").load("http://localhost/products/show/"+id);
+        $$("tbl_process").load("http://localhost/processes/show/"+id);
     }
 }

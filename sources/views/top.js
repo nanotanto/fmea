@@ -17,7 +17,7 @@ export default class TopView extends JetView{
 			width:180, layout:"y", select:true,
 			template:"<span style='padding-left:10px' class='webix_icon #icon#'></span> #value# ",
 			data:[
-				{ value:"DashBoard", id:"start", icon:"wxi-plus-square" },
+				//{ value:"DashBoard", id:"start", icon:"wxi-plus-square" },
 				{ value:"P-FMEA",		 id:"p-fmea",  icon:"wxi-columns" },
 				//{ value:"Settings",  id:"settings",  icon:"wxi-pencil" },
 				/*wjet::Menu*/

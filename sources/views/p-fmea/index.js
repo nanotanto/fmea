@@ -18,11 +18,24 @@ export default class IndexView extends JetView{
                     id:"tbl_fmea",
                     "view": "datatable", 
                     "columns": [
-                        { "id": "number", "header": "P-FMEA ID Number", "fillspace": false, "hidden": false, "width": 200 },
-                        { "id": "name", "header": "Product Name", "fillspace": true, "hidden": false },
-                        { "id": "issued", "header": "Prepared By", "fillspace": false, "hidden": false, "width": 200 },
-                        { "id": "action", "header": "", "fillspace": false, "hidden": false, "width": 100 }
+                        {id:"eye", header:"", template:"<span class='webix_icon wxi-file'></span>", width:40},
+                        { "id": "number", "header": "P-FMEA ID Number", "fillspace": false, "width": 200},
+                        { "id": "name", "header": "Product Name", "fillspace": true },
+                        { "id": "issued", "header": "Prepared By", "fillspace": false, "width": 200 },                        
+                        {id:"trash", header:"", template:"{common.trashIcon()}", width:40}
                     ],
+					onClick:{
+						"wxi-trash":function(event, id, node){
+                            webix.confirm("Are you sure want to delete data ?").then(function(result){
+                                webix.ajax().post("http://localhost/products/delete/"+id).then(() => webix.message("Deleted"));
+                                $$("tbl_fmea").remove(id);
+                            });
+                        },
+                        "wxi-file":function(event, id, node){
+                            //webix.confirm("Do you want to open spreadsheet FMEA data ?").then(function(result){                                
+                            //});
+                        }                    
+                    },                
                     url: "http://localhost/products",
                     select:true,
                     on:{
