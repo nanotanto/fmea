@@ -42,4 +42,8 @@ $router->put('products/update/{id}', 'ProductController@update');
 $router->get('products/newFmea', 'ProductController@newFmea');
 $router->post('products/delete/{id}', 'ProductController@delete');
 
-$router->get('subprocesses', 'SubprocessController@index');
+$router->get('steps', 'StepController@index');
+$router->get('steps/show/{id}', 'StepController@show');
+$router->post('steps/save', 'StepController@save');
+$router->put('steps/save/{id}', 'StepController@update');
+$router->post('steps/delete/{id}', 'StepController@delete');

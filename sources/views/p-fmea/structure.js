@@ -9,6 +9,14 @@ var saveProcess = webix.proxy("rest", "http://localhost:80/processes/save", {
     }
 });
 
+var saveStep = webix.proxy("rest", "http://localhost:80/steps/save", {
+    meta: "csrf_field()", //some param
+    save:function(view, params){
+        params.data.meta = this.meta;
+        return webix.proxy.rest.save.call(this, view, params);
+    }
+});
+
 export default class StructureView extends JetView{
 	config(){
 		return {
@@ -65,6 +73,7 @@ export default class StructureView extends JetView{
                 },
                 {
                     "cols": [
+                        //Tabel Process Item
                         {
                             "rows": [
                                 {
@@ -89,9 +98,9 @@ export default class StructureView extends JetView{
                                     "columns": [
                                         { id:"id", hidden:true},
                                         { id:"product_id", hidden:true},
-                                        { "id": "name", "header": "Process Item Name", "width": 200, editor:"text" },
+                                        { "id": "name", "header": "Process Item Name", "width": 150, editor:"text" },
                                         { "id": "function", "header": "Function", "fillspace": true, editor:"text" },                        
-                                        {id:"trash", header:"", template:"{common.trashIcon()}", width:40}
+                                        { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
                                     "view": "datatable",
                                     responsive:true, 
@@ -107,6 +116,13 @@ export default class StructureView extends JetView{
                                             });
                                         }
                                     },
+                                    on:{
+                                        "onAfterSelect":function(id){
+                                            $$("btn_add_step").enable();     
+                                            $$("tbl_step").clearAll();                         
+                                            $$("tbl_step").load("http://localhost/steps/show/"+id); 
+                                        }
+                                    }
                                 },
                                 {
                                     id:'tbl_process_all',
@@ -116,6 +132,8 @@ export default class StructureView extends JetView{
                                 }
                             ]
                         },
+
+                        //Tabel Process Step
                         {
                             "rows": [
                                 {
@@ -124,16 +142,53 @@ export default class StructureView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Process Step" },
-                                        { "view": "button", "label": "Add Process Step", "autowidth": true, "css": "webix_primary" }
+                                        { id:"btn_add_step", "view": "button", "label": "Add Process Step", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){ 
+                                            var _id = $$('tbl_step_all').getLastId();
+                                            var Select_process = $$("tbl_process").getSelectedId();
+                                            var process_id = Select_process['id'];
+                                            var data = { id:_id+1, process_id:process_id }
+                                            $$('tbl_step').editStop();
+                                            var id = $$('tbl_step').add(data, 0);
+                                            $$("tbl_step_all").load("http://localhost/steps"); 
+                                            $$('tbl_step').editRow(id);                   
+                                        }}
                                     ]
                                 },
                                 {
-                                   // "url": "demo->5fc4769724ab0800183ea11e",
+                                   id:"tbl_step",
                                     "columns": [
-                                        { "id": "name", "header": "Process Step Name", "width": 200, "fillspace": false, "hidden": false },
-                                        { "id": "function", "header": "Function", "fillspace": true, "hidden": false }
+                                        { id:"id", hidden:true},
+                                        { id:"process_id", hidden:true},
+                                        { "id": "name", "header": "Process Step Name", "width": 150, "fillspace": false, editor:"text" },
+                                        { "id": "function", "header": "Function", "fillspace": true, editor:"text"},
+                                        { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
-                                    "view": "datatable"
+                                    "view": "datatable",
+                                    responsive:true, 
+                                    select:true,
+                                    editable:true,
+                                    editaction:"dblclick",
+                                    save: saveStep,
+                                    onClick:{
+                                        "wxi-trash":function(event, id, node){
+                                            webix.confirm("Are you sure want to delete data ?").then(function(result){
+                                                webix.ajax().post("http://localhost/steps/delete/"+id).then(() => webix.message("Deleted"));
+                                                $$("tbl_step").remove(id);
+                                            });
+                                        }
+                                    },
+                                    on:{
+                                        "onAfterSelect":function(id){
+                                            $$("btn_add_element").enable();     
+                                        }
+                                    }
+                                },
+                                
+                                {
+                                    id:'tbl_step_all',
+                                    "view": "datatable",
+                                    columns:[{id:"id"}],
+                                    hidden:true,
                                 },
                                 {
                                     "css": "webix_dark",
@@ -141,7 +196,7 @@ export default class StructureView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Process Work Element 4M Type" },
-                                        { "view": "button", "label": "Add Element", "autowidth": true, "css": "webix_primary", 
+                                        { id:"btn_add_element", "view": "button", "label": "Add Element", "autowidth": true, "css": "webix_primary", disabled:true,
                                             click:() => this.win.showWindow()
                                         }
                                     ]
@@ -177,6 +232,7 @@ export default class StructureView extends JetView{
     init(){
         this.win = this.ui(ElementWinView);        
         $$("tbl_process_all").load("http://localhost/processes");
+        $$("tbl_step_all").load("http://localhost/steps");
     }
     urlChange(view, url){
         var id = url[0].params.id;
