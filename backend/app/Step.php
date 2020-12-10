@@ -13,5 +13,15 @@ class Step extends Model {
         'name',
         'function'
     ];
+
+    public function process()
+    {
+        return $this->belongsTo(Process::class);
+    }
+
+    public function element()
+    {
+        return $this->hasMany(Element::class);
+    }
         
 }

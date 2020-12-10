@@ -13,4 +13,9 @@ class Process extends Model {
         'name',
         'function'
     ];
+
+    public function step()
+    {
+        return $this->hasMany(Step::class);
+    }
 }

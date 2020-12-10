@@ -25,7 +25,13 @@ $router->get('products/show/', function() {
 
 $router->get('actions', 'ActionController@index');
 $router->get('currents', 'CurrentController@index');
+
 $router->get('elements', 'ElementController@index');
+$router->get('elements/show/{id}', 'ElementController@show');
+$router->post('elements/save', 'ElementController@save');
+$router->put('elements/save/{id}', 'ElementController@update');
+$router->post('elements/delete/{id}', 'ElementController@delete');
+
 $router->get('modes', 'ModeController@index');
 
 $router->get('processes', 'ProcessController@index');
@@ -43,6 +49,7 @@ $router->get('products/newFmea', 'ProductController@newFmea');
 $router->post('products/delete/{id}', 'ProductController@delete');
 
 $router->get('steps', 'StepController@index');
+$router->get('process_steps', 'StepController@process_steps');
 $router->get('steps/show/{id}', 'StepController@show');
 $router->post('steps/save', 'StepController@save');
 $router->put('steps/save/{id}', 'StepController@update');

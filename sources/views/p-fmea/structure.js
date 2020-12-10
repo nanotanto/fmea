@@ -120,7 +120,8 @@ export default class StructureView extends JetView{
                                         "onAfterSelect":function(id){
                                             $$("btn_add_step").enable();     
                                             $$("tbl_step").clearAll();                         
-                                            $$("tbl_step").load("http://localhost/steps/show/"+id); 
+                                            $$("tbl_step").load("http://localhost/steps/show/"+id);                                             
+                                            $$("btn_add_element").disable();
                                         }
                                     }
                                 },
@@ -197,7 +198,14 @@ export default class StructureView extends JetView{
                                     "cols": [
                                         { "view": "label", "label": "Process Work Element 4M Type" },
                                         { id:"btn_add_element", "view": "button", "label": "Add Element", "autowidth": true, "css": "webix_primary", disabled:true,
-                                            click:() => this.win.showWindow()
+                                            click:() => {          
+                                                this.win.showWindow();  
+                                                $$("tbl_process_step").clearAll();                                    
+                                                var Select_process = $$("tbl_process").getSelectedId();
+                                                var process_id = Select_process['id'];
+                                                $$("tbl_process_step").load('http://localhost/steps/show/'+process_id)         
+                                                $$("form_element").clear();                                        
+                                           }
                                         }
                                     ]
                                 }

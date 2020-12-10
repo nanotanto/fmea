@@ -67,12 +67,18 @@ export default class ModeView extends JetView{
                                     ]
                                 },
                                 {
-                                    //"url": "demo->5fc4769724ab0800183ea11e",
+                                    id:"tbl_process_step",
                                     "columns": [
                                         { "id": "process_id", "header": "Process item", "fillspace": true, "hidden": false },
                                         { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                     ],
-                                    "view": "datatable"
+                                    "view": "datatable",                                    
+                                    scheme:{
+                                        $init:function(row){
+                                            row.process_id = (row.process || "") && row.process.name                                
+                                        }
+                                    },
+                                    select:true
                                 }
                             ],
                             "width": 350
@@ -132,5 +138,8 @@ export default class ModeView extends JetView{
     urlChange(view, url){
         var id = url[0].params.id;
         $$("form_planning").load("http://localhost/products/show/"+id);
+    }
+    init(){
+        $$("tbl_process_step").load("http://localhost/process_steps");
     }
 }

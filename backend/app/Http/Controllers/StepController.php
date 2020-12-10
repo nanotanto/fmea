@@ -13,7 +13,7 @@ class StepController extends Controller
     }
     
     public function show($id){
-        $data = Step::where("process_id",$id)->get();
+        $data = Step::where("process_id",$id)->with('process')->get();
         return response()->json($data);
     }
 
@@ -31,5 +31,10 @@ class StepController extends Controller
     public function delete(Request $request, $id){
         $data = Step::find($id);
         $data->delete();
+    }
+
+    public function process_steps(){
+        $data = Step::with('process')->orderBy('process_id','asc')->get();
+        return response()->json($data);
     }
 }

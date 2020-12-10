@@ -1,3 +1,5 @@
+//import { $$ } from "webix";
+import { DataLoader } from "webix";
 import {JetView} from "webix-jet";
 
 export default class ElementWinView extends JetView{
@@ -7,6 +9,7 @@ export default class ElementWinView extends JetView{
             position:"center",
             width:900,
             height:600,
+            select:true,
             body:{
                 type:"wide", rows:[
                     {
@@ -24,12 +27,43 @@ export default class ElementWinView extends JetView{
                                 "rows": [
                                     { "type": "header", "template": "Structure of Process", "view": "template" },
                                     {
-                                        //"url": "demo->5fc449cb24ab0800183e9782",
+                                        id:"tbl_process_step",
                                         "columns": [
-                                            { "id": "process_id", "header": "Main Process Name", "fillspace": true, "hidden": false },
-                                            { "id": "name", "header": "Sub Process Name", "fillspace": true, "hidden": false }
+                                            { id:"id", hidden:false},
+                                            { "id": "process_id", "header": "Process Item", "fillspace": true, "hidden": false },
+                                            { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                         ],
-                                        "view": "datatable"
+                                        "view": "datatable",
+                                        select:true,
+                                        scheme:{
+                                            $init:function(row){
+                                                row.process_id = (row.process || "") && row.process.name                                
+                                            }
+                                        },
+                                        on:{
+                                            "onAfterSelect":function(id){                                                
+                                                $$("form_element").clear();     
+
+                                                webix.ajax().get("http://localhost/elements/show/"+id,
+                                                    function (text,data,xhr){                                                    
+                                                    var dt = data.json();
+                                                    if (dt['length']===0) {
+                                                        $$("step_id").setValue(id);
+                                                        $$("btn_edit").hide();
+                                                        $$("btn_save").show();
+                                                    } else {
+                                                        $$("form_element").load("http://localhost/elements/show/"+id);
+                                                        $$("btn_edit").show();
+                                                        $$("btn_save").hide();
+                                                    }
+                                                })
+
+                                                var Select_process = $$("tbl_process_step").getSelectedItem();
+                                                var step_name = Select_process['name'];
+                                                $$("_lbl").setValue("<h3>Process Work Element of "+step_name+"</h3>");
+                                                
+                                            }
+                                        }
                                     }
                                 ],
                                 "width": 350
@@ -37,41 +71,63 @@ export default class ElementWinView extends JetView{
                             {
                                 "autoheight": false,
                                 "view": "form",
+                                id:"form_element",
                                 "rows": [
+                                    { id:"_lbl", view:'label', label:"<h3>Process Work Element</h3>", height:70, hidden:false},
                                     {
                                         "cols": [
                                             {
-                                                "rows": [
-                                                    { "label": "Man", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Machine", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Material", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Method", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Measurement", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Environment", "view": "text", "labelPosition": "top" },
+                                                "rows": [                                                    
+                                                    { id:"_id", name:"id", "label": "ID", "view": "text", "labelPosition": "top", hidden:true },
+                                                    { id:"step_id", name:"step_id", "label": "Step_id", "view": "text", "labelPosition": "top", hidden:true },                                                    
+                                                    { name:"man", "label": "Man", "view": "text", "labelPosition": "top" },
+                                                    { name:"machine", "label": "Machine", "view": "text", "labelPosition": "top" },
+                                                    { name:"material", "label": "Material", "view": "text", "labelPosition": "top" },
+                                                    { name:"method", "label": "Method", "view": "text", "labelPosition": "top" },
+                                                    { name:"measure", "label": "Measurement", "view": "text", "labelPosition": "top" },
+                                                    { name:"enviro", "label": "Environment", "view": "text", "labelPosition": "top" },
                                                     { "view": "template", "role": "placeholder", "borderless": true }
                                                 ],
-                                                "margin": 10,
+                                                //"margin": 10,
                                                 "padding": { "right": 10 },
                                                 "borderless": true,
                                                 "width": 150
                                             },
                                             {
                                                 "rows": [
-                                                    { "label": "Function of Man", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Function of Machine", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Function of Material", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Function of Method", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Function of Measurement", "view": "text", "labelPosition": "top" },
-                                                    { "label": "Function of Environment", "view": "text",  "labelPosition": "top" },
+                                                    { name:"func_man", "label": "Function of Man", "view": "text", "labelPosition": "top" },
+                                                    { name:"func_machine", "label": "Function of Machine", "view": "text", "labelPosition": "top" },
+                                                    { name:"func_material", "label": "Function of Material", "view": "text", "labelPosition": "top" },
+                                                    { name:"func_method", "label": "Function of Method", "view": "text", "labelPosition": "top" },
+                                                    { name:"func_measure", "label": "Function of Measurement", "view": "text", "labelPosition": "top" },
+                                                    { name:"func_enviro", "label": "Function of Environment", "view": "text",  "labelPosition": "top" },
                                                     {
                                                         "cols": [
                                                             { "view": "template", "role": "placeholder", "borderless": true },
-                                                            { "label": "Save", "view": "button", "css": "webix_primary", "width": 100 }
+                                                            { id:"btn_edit","label": "Edit", "view": "button", "css": "webix_primary", "width": 100, hidden:true,
+                                                                click:()=>{
+                                                                    var id = $$("_id").getValue();
+                                                                    var data = $$("form_element").getValues();
+                                                                    webix.confirm("Do you wont to edit data ?").then(function(result){
+                                                                        webix.ajax().put("http://localhost/elements/save/"+id, data).then(() => webix.message("Edited"));
+                                                                        //$$("btn_edit").disable();
+                                                                    });
+                                                                }
+                                                            },
+                                                            { id:"btn_save","label": "Save", "view": "button", "css": "webix_primary", "width": 100, hidden:true,
+                                                                click:()=>{
+                                                                    var data = $$("form_element").getValues();                                                                    webix.confirm("Do you wont to save data ?").then(function(result){
+                                                                        webix.ajax().post("http://localhost/elements/save", data).then(() => webix.message("Saved"));
+                                                                        $$("btn_save").hide();
+                                                                        $("btn_edit").show();
+                                                                    });
+                                                                }
+                                                            }
                                                         ]
                                                     },
                                                     { "view": "template", "role": "placeholder", "borderless": 1 }
                                                 ],
-                                                "margin": 10,
+                                                //"margin": 10,
                                                 "padding": { "left": 10 },
                                                 "borderless": true,
                                                 "width": 0
@@ -80,7 +136,7 @@ export default class ElementWinView extends JetView{
                                         "borderless": true
                                     }
                                 ],
-                                "padding": { "top": 30 },
+                                //"padding": { "top": 30 },
                                 "width": 0
                             }
                         ]
