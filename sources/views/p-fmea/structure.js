@@ -85,11 +85,18 @@ export default class StructureView extends JetView{
                                         { "view": "button", "label": "Add Process Item", "autowidth": true, "css": "webix_primary", click:function(){ 
                                             var _id = $$('tbl_process_all').getLastId();
                                             var product_id = $$("id").getValue();
-                                            var data = { id:_id+1, product_id:product_id }
+                                            // var data = { id:_id+1, product_id:product_id }
+
+                                            if ( _id === undefined) {
+                                                var data = { id:1, product_id:product_id }
+                                            } else {
+                                                var data = { id:_id+1, product_id:product_id } 
+                                            }
+
                                             $$('tbl_process').editStop();
                                             var id = $$('tbl_process').add(data, 0);
                                             $$("tbl_process_all").load("http://localhost/processes"); 
-                                            $$('tbl_process').editRow(id);                   
+                                            $$('tbl_process').editRow(id);   
                                         }}
                                     ]
                                 },
@@ -144,10 +151,17 @@ export default class StructureView extends JetView{
                                     "cols": [
                                         { "view": "label", "label": "Process Step" },
                                         { id:"btn_add_step", "view": "button", "label": "Add Process Step", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){ 
-                                            var _id = $$('tbl_step_all').getLastId();
+                                            var _idstep = $$('tbl_step_all').getLastId();
                                             var Select_process = $$("tbl_process").getSelectedId();
                                             var process_id = Select_process['id'];
-                                            var data = { id:_id+1, process_id:process_id }
+                                            //var data = { id:_idstep+1, process_id:process_id }
+
+                                            if ( _idstep === undefined) {
+                                                var data = { id:1, process_id:process_id }
+                                            } else {
+                                                var data = { id:_idstep+1, process_id:process_id }
+                                            }
+
                                             $$('tbl_step').editStop();
                                             var id = $$('tbl_step').add(data, 0);
                                             $$("tbl_step_all").load("http://localhost/steps"); 
@@ -183,8 +197,7 @@ export default class StructureView extends JetView{
                                             $$("btn_add_element").enable();     
                                         }
                                     }
-                                },
-                                
+                                },                                
                                 {
                                     id:'tbl_step_all',
                                     "view": "datatable",

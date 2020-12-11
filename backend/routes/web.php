@@ -24,7 +24,17 @@ $router->get('products/show/', function() {
 });
 
 $router->get('actions', 'ActionController@index');
+$router->get('actions/show/{id}', 'ActionController@show');
+$router->post('actions/save', 'ActionController@save');
+$router->put('actions/save/{id}', 'ActionController@update');
+$router->post('actions/delete/{id}', 'ActionController@delete');
+
+$router->get('currentsAll', 'CurrentController@indexAll');
 $router->get('currents', 'CurrentController@index');
+$router->get('currents/show/{id}', 'CurrentController@show');
+$router->post('currents/save', 'CurrentController@save');
+$router->put('currents/save/{id}', 'CurrentController@update');
+$router->post('currents/delete/{id}', 'CurrentController@delete');
 
 $router->get('elements', 'ElementController@index');
 $router->get('elements/show/{id}', 'ElementController@show');
@@ -32,7 +42,12 @@ $router->post('elements/save', 'ElementController@save');
 $router->put('elements/save/{id}', 'ElementController@update');
 $router->post('elements/delete/{id}', 'ElementController@delete');
 
+$router->get('modesAll', 'ModeController@indexAll');
 $router->get('modes', 'ModeController@index');
+$router->get('modes/show/{id}', 'ModeController@show');
+$router->post('modes/save', 'ModeController@save');
+$router->put('modes/save/{id}', 'ModeController@update');
+$router->post('modes/delete/{id}', 'ModeController@delete');
 
 $router->get('processes', 'ProcessController@index');
 $router->get('processes/show/{id}', 'ProcessController@show');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mode;
+use App\Process;
 use Illuminate\Http\Request;
 
 class ModeController extends Controller
@@ -32,4 +33,23 @@ class ModeController extends Controller
         $data = Mode::find($id);
         $data->delete();
     }
+
+    public function indexAll(){
+        $data = Process::select(
+            'processes.name as item',
+            'steps.name as step',
+            'modes.id as id',
+            'modes.name as mode',
+            'modes.category as category',
+            'modes.effect_in as in',
+            'modes.effect_next as next',
+            'modes.effect_end as end',
+            'modes.s as s'
+            )->Join('steps', 'steps.process_id', '=', 'processes.id')
+            ->Join('modes', 'modes.step_id', '=', 'steps.id')
+            ->orderBy('processes.id','asc')
+            ->get();
+        return response()->json($data);
+    }
+
 }

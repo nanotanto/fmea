@@ -29,7 +29,7 @@ export default class ElementWinView extends JetView{
                                     {
                                         id:"tbl_process_step",
                                         "columns": [
-                                            { id:"id", hidden:false},
+                                            { id:"id", hidden:true},
                                             { "id": "process_id", "header": "Process Item", "fillspace": true, "hidden": false },
                                             { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                         ],

@@ -23,5 +23,10 @@ class Step extends Model {
     {
         return $this->hasMany(Element::class);
     }
+
+    public function mode()
+    {
+        return $this->hasMany(Mode::class);
+    }
         
 }

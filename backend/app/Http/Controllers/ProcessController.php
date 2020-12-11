@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Process;
 use Illuminate\Http\Request;
+use DB;
 
 class ProcessController extends Controller
 {
@@ -32,4 +33,6 @@ class ProcessController extends Controller
         $data = Process::find($id);
         $data->delete();
     }
+
+    
 }

@@ -1,5 +1,13 @@
 import {JetView} from "webix-jet";
 
+var saveMode = webix.proxy("rest", "http://localhost:80/modes/save", {
+    meta: "csrf_field()", //some param
+    save:function(view, params){
+        params.data.meta = this.meta;
+        return webix.proxy.rest.save.call(this, view, params);
+    }
+});
+
 export default class ModeView extends JetView{
 	config(){
 		return {
@@ -67,7 +75,7 @@ export default class ModeView extends JetView{
                                     ]
                                 },
                                 {
-                                    id:"tbl_process_step",
+                                    id:"tbl_process_step2",
                                     "columns": [
                                         { "id": "process_id", "header": "Process item", "fillspace": true, "hidden": false },
                                         { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
@@ -78,7 +86,14 @@ export default class ModeView extends JetView{
                                             row.process_id = (row.process || "") && row.process.name                                
                                         }
                                     },
-                                    select:true
+                                    select:true,                                    
+                                    on:{
+                                        "onAfterSelect":function(id){                                                
+                                            $$("tbl_mode").clearAll();     
+                                            $$("tbl_mode").load("http://localhost/modes/show/"+id);  
+                                            $$("btn_add").enable();                                      
+                                        }
+                                    }
                                 }
                             ],
                             "width": 350
@@ -91,20 +106,59 @@ export default class ModeView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Failure Mode" },
-                                        { "view": "button", "label": "Add Failure Mode", "autowidth": true, "css": "webix_primary" }
+                                        { id:"btn_add","view": "button", "label": "Add Failure Mode", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){ 
+                                            var _idmode = $$('tbl_mode_all').getLastId();
+                                            var Select_process = $$("tbl_process_step2").getSelectedId();
+                                            var step_id = Select_process['id'];
+                                            //var data = { id:_idmode+1, step_id:step_id, s:1 }
+
+                                            if ( _idmode === undefined) {
+                                                var data = { id:1, step_id:step_id, s:1 }
+                                            } else {
+                                                var data = { id:_idmode+1, step_id:step_id, s:1 }
+                                            }
+
+
+                                            $$('tbl_mode').editStop();
+                                            var id = $$('tbl_mode').add(data, 0);
+                                            $$("tbl_mode_all").load("http://localhost/modes"); 
+                                            $$('tbl_mode').editRow(id);                   
+                                            } 
+                                        }
                                     ]
                                 },
                                 {
-                                    //"url": "demo->5fc4769724ab0800183ea11e",
+                                    id:"tbl_mode",
                                     "columns": [
-                                        { "id": "category", "header": "Category", "width": 150, "fillspace": false, "hidden": false },
-                                        { "id": "name", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
-                                        { "id": "in", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect In Line"], "fillspace": true, "hidden": false },
-                                        { "id": "next", "header": [{},"Effect to Next Process"], "fillspace": true, "hidden": false },
-                                        { "id": "end", "header": [{},"Effect to Customer/ End User"], "fillspace": true, "hidden": false },
-                                        { "id": "s", "header": ["Severity","<center>(S)</center>"], "width": 60, "fillspace": false, "hidden": false }
+                                        { id:"id", hidden:true},
+                                        { id:"step_id", hidden:true},
+                                        { "id": "name", editor:"text", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
+                                        { "id": "category", editor:"select",options:["Product","Process"], "header": "Category", "width": 80, "fillspace": false, "hidden": false },
+                                        { "id": "effect_in", editor:"text", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect In Line"], "fillspace": true, "hidden": false },
+                                        { "id": "effect_next", editor:"text", "header": [{},"Effect to Next Process"], "fillspace": true, "hidden": false },
+                                        { "id": "effect_end", editor:"text", "header": [{},"Effect to Customer/ End User"], "fillspace": true, "hidden": false },
+                                        { "id": "s", editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": ["Severity","<center>(S)</center>"], "width": 60, "fillspace": false, "hidden": false },
+                                        { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
-                                    "view": "datatable"
+                                    "view": "datatable",
+                                    select:true,
+                                    editable:true,
+                                    editaction:"dblclick",
+                                    save: saveMode,
+                                    onClick:{
+                                        "wxi-trash":function(event, id, node){
+                                            webix.confirm("Are you sure want to delete data ?").then(function(result){
+                                                webix.ajax().post("http://localhost/modes/delete/"+id).then(() => webix.message("Deleted"));
+                                                $$("tbl_mode").remove(id);
+                                            });
+                                        }
+                                    }
+                                },                                
+                                {
+                                    id:'tbl_mode_all',
+                                    "view": "datatable",
+                                    columns:[{id:"id"}],
+                                    hidden:true,
                                 }
                             ],
                             "width": 0
@@ -140,6 +194,8 @@ export default class ModeView extends JetView{
         $$("form_planning").load("http://localhost/products/show/"+id);
     }
     init(){
-        $$("tbl_process_step").load("http://localhost/process_steps");
+        $$("tbl_process_step2").load("http://localhost/process_steps");
+        $$("tbl_mode_all").load("http://localhost/modes");
+        $$("tbl_mode").load("http://localhost/modes");
     }
 }

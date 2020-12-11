@@ -37,4 +37,5 @@ class StepController extends Controller
         $data = Step::with('process')->orderBy('process_id','asc')->get();
         return response()->json($data);
     }
+
 }

@@ -1,5 +1,13 @@
 import {JetView} from "webix-jet";
 
+var saveCurrent = webix.proxy("rest", "http://localhost:80/currents/save", {
+    meta: "csrf_field()", //some param
+    save:function(view, params){
+        params.data.meta = this.meta;
+        return webix.proxy.rest.save.call(this, view, params);
+    }
+});
+
 export default class RiskView extends JetView{
 	config(){
 		return {
@@ -65,18 +73,27 @@ export default class RiskView extends JetView{
                             ]
                         },
                         {
-                            //"url": "demo->5fc4769724ab0800183ea11e",
+                            id:"tbl_modes_all",
                             "columns": [
-                                { "id": "process_id", "header": "Process Item", "width": 150, "fillspace": false, "hidden": false },
-                                { "id": "sub_process_id", "header": "Process Step", "width": 150, "fillspace": false, "hidden": false },
+                                { id:"id", hidden:true},
+                                { "id": "item", "header": "Process Item", "width": 150, "fillspace": false, "hidden": false },
+                                { "id": "step", "header": "Process Step", "width": 150, "fillspace": false, "hidden": false },
+                                { "id": "mode", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
                                 { "id": "category", "header": "Category", "width": 150, "fillspace": false, "hidden": false },
-                                { "id": "name", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
                                 { "id": "in", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect In Line"], "fillspace": true, "hidden": false },
                                 { "id": "next", "header": [{},"Effect to Next Process"], "fillspace": true, "hidden": false },
                                 { "id": "end", "header": [{},"Effect to Customer/ End User"], "fillspace": true, "hidden": false },
                                 { "id": "s", "header": ["Severity","<center>S</center>"], "width": 60, "fillspace": false, "hidden": false }
                             ],
-                            "view": "datatable"
+                            "view": "datatable",
+                            select:true,
+                            on:{
+                                "onAfterSelect":function(id){
+                                    $$("tbl_current").clearAll();     
+                                    $$("tbl_current").load("http://localhost/currents/show/"+id);                                 
+                                    $$("btn_add_current").enable();     
+                                }
+                            }
                         },
                         {
                             "css": "webix_dark",
@@ -84,23 +101,61 @@ export default class RiskView extends JetView{
                             "height": 34,
                             "cols": [
                                 { "view": "label", "label": "Current Condition" },
-                                { "view": "button", "label": "Add Current Condition", "autowidth": true, "css": "webix_primary" }
+                                { id:"btn_add_current","view": "button", "label": "Add Current Condition", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){
+                                    var _idcurrent = $$('tbl_current_all').getLastId();
+                                    var Select_mode = $$("tbl_modes_all").getSelectedId();
+                                    var mode_id = Select_mode['id'];
+                                    //var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
+
+                                    if ( _idcurrent === undefined) {
+                                        var data = { id:1, mode_id:mode_id, o:1, d:1 }
+                                    } else {
+                                        var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
+                                    }
+
+                                    $$('tbl_current').editStop();
+                                    var id = $$('tbl_current').add(data, 0);
+                                    $$("tbl_current_all").load("http://localhost/currents"); 
+                                    $$('tbl_current').editRow(id); 
+                                    }
+                                }
                             ]
                         },
                         {
-                            //"url": "demo->5fc449cb24ab0800183e9782",
+                            id:"tbl_current",
                             "columns": [
-                                { "id": "element", "header": "Work Element", "sort": "string", "fillspace": false, "hidden": false },
-                                { "id": "cause", "header": "Failure Cause (FC)", "sort": "string", "fillspace": true, "hidden": false },
-                                { "id": "prevention", "header": "Prevention Control (PC) of FC", "fillspace": true, "sort": "string", "hidden": false },
-                                { "id": "o", "header": "O", "width": 35, "fillspace": false, "hidden": false },
-                                { "id": "detection", "header": "Detection Controls (DC) of FC or FM", "sort": "string", "fillspace": true, "hidden": false },
-                                { "id": "d","header": "D", "sort": "string", "width": 35, "fillspace": false, "hidden": false },
-                                { "id": "ap", "header": "AP", "width": 35, "fillspace": false, "hidden": false },
-                                { "id": "spec", "header": "Spec. Char.", "sort": "string", "fillspace": false, "hidden": false }
+                                { id:"id", hidden:true},
+                                { id:"mode_id", hidden:true},
+                                { "id": "element",editor:"select",options:["Man","Machine","Material",'Method','Measurement','Environment'],"header": "Work Element", "sort": "string", "fillspace": false, "hidden": false },
+                                { "id": "cause",editor:"text", "header": "Failure Cause (FC)", "sort": "string", "fillspace": true, "hidden": false },
+                                { "id": "prevention",editor:"text", "header": "Prevention Control (PC) of FC", "fillspace": true, "sort": "string", "hidden": false },
+                                { "id": "o",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "O", "width": 50, "fillspace": false, "hidden": false },
+                                { "id": "detection", editor:"text", "header": "Detection Controls (DC) of FC or FM", "sort": "string", "fillspace": true, "hidden": false },
+                                { "id": "d",editor:"select",options:[1,2,3,4,5,6,7,8,9,10],"header": "D", "sort": "string", "width": 50, "fillspace": false, "hidden": false },
+                                { "id": "ap",editor:"select",options:["Low","Medium","High"], "header": "AP", "width": 100, "fillspace": false, "hidden": false },
+                                { "id": "sc",editor:"select",options:["Safety","Emission","Regulation"],  "header": "Spec. Char.", "sort": "string", "fillspace": false, "hidden": false },
+                                { header:"", template:"{common.trashIcon()}", width:40}
                             ],
                             "view": "datatable",
-                            "height": 120
+                            "height": 120,
+                            select:true,
+                            editable:true,
+                            editaction:"dblclick",
+                            save: saveCurrent,
+                            onClick:{
+                                "wxi-trash":function(event, id, node){
+                                    webix.confirm("Are you sure want to delete data ?").then(function(result){
+                                        webix.ajax().post("http://localhost/currents/delete/"+id).then(() => webix.message("Deleted"));
+                                        $$("tbl_current").remove(id);
+                                    });
+                                }
+                            }
+                        },                                
+                        {
+                            id:'tbl_current_all',
+                            "view": "datatable",
+                            columns:[{id:"id"}],
+                            hidden:true,
                         }
                     ]
                 },
@@ -131,5 +186,9 @@ export default class RiskView extends JetView{
     urlChange(view, url){
         var id = url[0].params.id;
         $$("form_planning").load("http://localhost/products/show/"+id);
+    }
+    init(){
+        $$("tbl_modes_all").load("http://localhost/modesAll");
+        $$("tbl_current_all").load("http://localhost/currents");
     }
 }
