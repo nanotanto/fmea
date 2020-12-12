@@ -1,5 +1,6 @@
 import "./styles/app.css";
-import { JetApp } from "webix-jet";
+import { JetApp, plugins } from "webix-jet";
+import session from "models/session";
 
 export default class App extends JetApp{
 	constructor(config){
@@ -13,6 +14,7 @@ export default class App extends JetApp{
 		super({ ...defaults, ...config });
 
 		/*wjet::plugin*/
+		this.use(plugins.User, { model: session });
 	}
 }
 

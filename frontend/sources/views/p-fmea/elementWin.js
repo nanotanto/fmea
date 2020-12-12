@@ -54,7 +54,7 @@ export default class ElementWinView extends JetView{
                                                         $$("btn_edit").hide();
                                                         $$("btn_save").show();
                                                     } else {
-                                                        $$("form_element").load("elements/show/"+id);
+                                                        $$("form_element").load("/elements/show/"+id);
                                                         $$("btn_edit").show();
                                                         $$("btn_save").hide();
                                                     }

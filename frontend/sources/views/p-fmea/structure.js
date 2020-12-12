@@ -3,7 +3,7 @@ import ElementWinView from "views/p-fmea/elementWin";
 
 var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
 
-var saveProcess = webix.proxy("rest", "http://localhost:80/processes/save", {
+var saveProcess = webix.proxy("rest", "/processes/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
         params.data.meta = this.meta;
@@ -11,7 +11,7 @@ var saveProcess = webix.proxy("rest", "http://localhost:80/processes/save", {
     }
 });
 
-var saveStep = webix.proxy("rest", "http://localhost:80/steps/save", {
+var saveStep = webix.proxy("rest", "/steps/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
         params.data.meta = this.meta;
@@ -97,7 +97,7 @@ export default class StructureView extends JetView{
 
                                             $$('tbl_process').editStop();
                                             var id = $$('tbl_process').add(data, 0);
-                                            $$("tbl_process_all").load("processes"); 
+                                            $$("tbl_process_all").load("/processes"); 
                                             $$('tbl_process').editRow(id);   
                                         }}
                                     ]
@@ -129,7 +129,7 @@ export default class StructureView extends JetView{
                                         "onAfterSelect":function(id){
                                             $$("btn_add_step").enable();     
                                             $$("tbl_step").clearAll();                         
-                                            $$("tbl_step").load("steps/show/"+id);                                             
+                                            $$("tbl_step").load("/steps/show/"+id);                                             
                                             $$("btn_add_element").disable();
                                         }
                                     }
@@ -166,7 +166,7 @@ export default class StructureView extends JetView{
 
                                             $$('tbl_step').editStop();
                                             var id = $$('tbl_step').add(data, 0);
-                                            $$("tbl_step_all").load("steps"); 
+                                            $$("tbl_step_all").load("/steps"); 
                                             $$('tbl_step').editRow(id);                   
                                         }}
                                     ]
@@ -218,7 +218,7 @@ export default class StructureView extends JetView{
                                                 $$("tbl_process_step").clearAll();                                    
                                                 var Select_process = $$("tbl_process").getSelectedItem();
                                                 var process_id = Select_process['id'];
-                                                $$("tbl_process_step").load('steps/show/'+process_id)         
+                                                $$("tbl_process_step").load('/steps/show/'+process_id)         
                                                 $$("form_element").clear();                                        
                                            }
                                         }
@@ -254,12 +254,12 @@ export default class StructureView extends JetView{
     }
     init(){
         this.win = this.ui(ElementWinView);        
-        $$("tbl_process_all").load("processes");
-        $$("tbl_step_all").load("steps");
+        $$("tbl_process_all").load("/processes");
+        $$("tbl_step_all").load("/steps");
     }
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("products/show/"+id);
-        $$("tbl_process").load("processes/show/"+id);
+        $$("form_planning").load("/products/show/"+id);
+        $$("tbl_process").load("/processes/show/"+id);
     }
 }

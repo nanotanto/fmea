@@ -1,8 +1,9 @@
+//import { $$ } from "webix";
 import {JetView} from "webix-jet";
 
 var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
 
-var saveMode = webix.proxy("rest", "http://localhost:80/modes/save", {
+var saveMode = webix.proxy("rest", "/modes/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
         params.data.meta = this.meta;
@@ -79,20 +80,23 @@ export default class ModeView extends JetView{
                                 {
                                     id:"tbl_process_step2",
                                     "columns": [
+                                        { id:"id", hidden:true},
                                         { "id": "process_id", "header": "Process item", "fillspace": true, "hidden": false },
                                         { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                     ],
                                     "view": "datatable",                                    
-                                    scheme:{
-                                        $init:function(row){
-                                            row.process_id = (row.process || "") && row.process.name                                
-                                        }
-                                    },
+                                    // scheme:{
+                                    //     $init:function(row){
+                                    //         //row.process_id = (row.process || "") && row.process.name                                
+                                    //     }
+                                    // },
                                     select:true,                                    
                                     on:{
-                                        "onAfterSelect":function(id){                                                
+                                        "onAfterSelect":function(id){        
+                                            //var Select_process = $$("tbl_process_step2").getSelectedId();
+                                            //var step_id = Select_process['id'];
                                             $$("tbl_mode").clearAll();     
-                                            $$("tbl_mode").load("modes/show/"+id);  
+                                            $$("tbl_mode").load("/modes/show/"+id);  
                                             $$("btn_add").enable();                                      
                                         }
                                     }
@@ -110,7 +114,7 @@ export default class ModeView extends JetView{
                                         { "view": "label", "label": "Failure Mode" },
                                         { id:"btn_add","view": "button", "label": "Add Failure Mode", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){ 
                                             var _idmode = $$('tbl_mode_all').getLastId();
-                                            var Select_process = $$("tbl_process_step2").getSelectedId();
+                                            var Select_process = $$("tbl_process_step2").getSelectedItem();
                                             var step_id = Select_process['id'];
                                             //var data = { id:_idmode+1, step_id:step_id, s:1 }
 
@@ -123,7 +127,7 @@ export default class ModeView extends JetView{
 
                                             $$('tbl_mode').editStop();
                                             var id = $$('tbl_mode').add(data, 0);
-                                            $$("tbl_mode_all").load("modes"); 
+                                            $$("tbl_mode_all").load("/modes"); 
                                             $$('tbl_mode').editRow(id);                   
                                             } 
                                         }
@@ -193,11 +197,11 @@ export default class ModeView extends JetView{
     }    
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("products/show/"+id);
+        $$("form_planning").load("/products/show/"+id);
+        $$("tbl_process_step2").load("/process_steps/"+id);
     }
     init(){
-        $$("tbl_process_step2").load("process_steps");
-        $$("tbl_mode_all").load("modes");
-        $$("tbl_mode").load("modes");
+        $$("tbl_mode_all").load("/modes");
+        $$("tbl_mode").load("/modes");
     }
 }

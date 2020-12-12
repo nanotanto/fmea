@@ -47,7 +47,7 @@ class ModeController extends Controller
             'modes.s as s'
             )->Join('steps', 'steps.process_id', '=', 'processes.id')
             ->Join('modes', 'modes.step_id', '=', 'steps.id')
-            ->orderBy('processes.id','asc')
+            ->orderBy('steps.id','asc')
             ->get();
         return response()->json($data);
     }

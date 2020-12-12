@@ -34,5 +34,13 @@ class ProcessController extends Controller
         $data->delete();
     }
 
+    public function process_steps($id){
+        $data = Process::join('steps', 'steps.process_id', '=', 'processes.id')
+        ->select('processes.name as process_id', 'steps.name as name', 'steps.id as id')
+        ->where('product_id',$id)        
+        ->orderBy('process_id','asc')->get();
+        return response()->json($data);
+    }
+
     
 }

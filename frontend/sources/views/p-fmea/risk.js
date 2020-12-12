@@ -2,7 +2,7 @@ import {JetView} from "webix-jet";
 
 var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
 
-var saveCurrent = webix.proxy("rest", "http://localhost:80/currents/save", {
+var saveCurrent = webix.proxy("rest", "/currents/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
         params.data.meta = this.meta;
@@ -92,7 +92,7 @@ export default class RiskView extends JetView{
                             on:{
                                 "onAfterSelect":function(id){
                                     $$("tbl_current").clearAll();     
-                                    $$("tbl_current").load("currents/show/"+id);                                 
+                                    $$("tbl_current").load("/currents/show/"+id);                                 
                                     $$("btn_add_current").enable();     
                                 }
                             }
@@ -117,7 +117,7 @@ export default class RiskView extends JetView{
 
                                     $$('tbl_current').editStop();
                                     var id = $$('tbl_current').add(data, 0);
-                                    $$("tbl_current_all").load("currents"); 
+                                    $$("tbl_current_all").load("/currents"); 
                                     $$('tbl_current').editRow(id); 
                                     }
                                 }
@@ -187,10 +187,10 @@ export default class RiskView extends JetView{
 	}
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("products/show/"+id);
+        $$("form_planning").load("/products/show/"+id);
     }
     init(){
-        $$("tbl_modes_all").load("modesAll");
-        $$("tbl_current_all").load("currents");
+        $$("tbl_modes_all").load("/modesAll");
+        $$("tbl_current_all").load("/currents");
     }
 }

@@ -131,6 +131,6 @@ export default class PlanningView extends JetView{
     }
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("products/show/"+id);
+        $$("form_planning").load("/products/show/"+id);
     }
 }

@@ -55,6 +55,7 @@ $router->get('processes/show/{id}', 'ProcessController@show');
 $router->post('processes/save', 'ProcessController@save');
 $router->put('processes/save/{id}', 'ProcessController@update');
 $router->post('processes/delete/{id}', 'ProcessController@delete');
+$router->get('process_steps/{id}', 'ProcessController@process_steps');
 
 $router->get('products', 'ProductController@index');
 
@@ -70,3 +71,8 @@ $router->get('steps/show/{id}', 'StepController@show');
 $router->post('steps/save', 'StepController@save');
 $router->put('steps/save/{id}', 'StepController@update');
 $router->post('steps/delete/{id}', 'StepController@delete');
+
+$router->post('/server/login', function () {
+    //return $router->app->version();
+    return view('login');
+});

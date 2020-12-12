@@ -69,7 +69,7 @@ export default class PlanningView extends JetView{
 
                                                         webix.confirm("Do you wont to save data ?").then(function(result){
                                                             webix.ajax().post("products/save", data).then(() => webix.message("Saved"))
-                                                            .then(()=>$$('form_planning').load("products/newFmea"));
+                                                            .then(()=>$$('form_planning').load("/products/newFmea"));
                                                             $$("btn_save").disable();
                                                         });
                                                         // .fail(function(){
