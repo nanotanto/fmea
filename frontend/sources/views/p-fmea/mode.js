@@ -1,5 +1,7 @@
 import {JetView} from "webix-jet";
 
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 var saveMode = webix.proxy("rest", "http://localhost:80/modes/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
@@ -90,7 +92,7 @@ export default class ModeView extends JetView{
                                     on:{
                                         "onAfterSelect":function(id){                                                
                                             $$("tbl_mode").clearAll();     
-                                            $$("tbl_mode").load("http://localhost/modes/show/"+id);  
+                                            $$("tbl_mode").load("modes/show/"+id);  
                                             $$("btn_add").enable();                                      
                                         }
                                     }
@@ -121,7 +123,7 @@ export default class ModeView extends JetView{
 
                                             $$('tbl_mode').editStop();
                                             var id = $$('tbl_mode').add(data, 0);
-                                            $$("tbl_mode_all").load("http://localhost/modes"); 
+                                            $$("tbl_mode_all").load("modes"); 
                                             $$('tbl_mode').editRow(id);                   
                                             } 
                                         }
@@ -148,7 +150,7 @@ export default class ModeView extends JetView{
                                     onClick:{
                                         "wxi-trash":function(event, id, node){
                                             webix.confirm("Are you sure want to delete data ?").then(function(result){
-                                                webix.ajax().post("http://localhost/modes/delete/"+id).then(() => webix.message("Deleted"));
+                                                webix.ajax().post("modes/delete/"+id).then(() => webix.message("Deleted"));
                                                 $$("tbl_mode").remove(id);
                                             });
                                         }
@@ -191,11 +193,11 @@ export default class ModeView extends JetView{
     }    
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("http://localhost/products/show/"+id);
+        $$("form_planning").load("products/show/"+id);
     }
     init(){
-        $$("tbl_process_step2").load("http://localhost/process_steps");
-        $$("tbl_mode_all").load("http://localhost/modes");
-        $$("tbl_mode").load("http://localhost/modes");
+        $$("tbl_process_step2").load("process_steps");
+        $$("tbl_mode_all").load("modes");
+        $$("tbl_mode").load("modes");
     }
 }

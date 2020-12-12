@@ -1,5 +1,7 @@
 import {JetView} from "webix-jet";
  
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 export default class PlanningView extends JetView{
 	config(){
 		return {
@@ -66,15 +68,15 @@ export default class PlanningView extends JetView{
                                                         var data = $$("form_planning").getValues();
 
                                                         webix.confirm("Do you wont to save data ?").then(function(result){
-                                                            webix.ajax().post("http://localhost/products/save", data).then(() => webix.message("Saved"))
-                                                            .then(()=>$$('form_planning').load("http://localhost/products/newFmea"));
+                                                            webix.ajax().post("products/save", data).then(() => webix.message("Saved"))
+                                                            .then(()=>$$('form_planning').load("products/newFmea"));
                                                             $$("btn_save").disable();
                                                         });
                                                         // .fail(function(){
                                                         //   webix.message("Cancel");
                                                         // });
 
-                                                        //webix.ajax().post(url+"../backend/lumen/public/saveLog", data)
+                                                        //webix.ajax().post("../backend/lumen/public/saveLog", data)
                                                     }
                                                     else
                                                       webix.message({ type:"error", text:"Form data is invalid" });
@@ -132,8 +134,8 @@ export default class PlanningView extends JetView{
 			]
 		}
     }
-    urlChange(view, url){
-        var id = url[0].params.id;
-        $$("form_planning").load("http://localhost/products/show/"+id);
-    }
+    // urlChange(view, url){
+    //     var id = url[0].params.id;
+    //     $$("form_planning").load("products/show/"+id);
+    // }
 }

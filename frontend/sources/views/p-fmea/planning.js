@@ -1,5 +1,7 @@
 import {JetView} from "webix-jet";
  
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 export default class PlanningView extends JetView{
 	config(){
 		return {
@@ -66,11 +68,11 @@ export default class PlanningView extends JetView{
                                                         var id = $$("id").getValue();
                                                         var data = $$("form_planning").getValues();
                                                         webix.confirm("Do you wont to edit data ?").then(function(result){
-                                                            webix.ajax().put("http://localhost/products/update/"+id, data).then(() => webix.message("Edited"));
+                                                            webix.ajax().put("products/update/"+id, data).then(() => webix.message("Edited"));
                                                             //$$("btn_edit").disable();
                                                         });
                                                         
-                                                        //webix.ajax().post(url+"../backend/lumen/public/saveLog", data)
+                                                        //webix.ajax().post("../backend/lumen/public/saveLog", data)
                                                     }
                                                     else
                                                       webix.message({ type:"error", text:"Form data is invalid" });
@@ -129,6 +131,6 @@ export default class PlanningView extends JetView{
     }
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("http://localhost/products/show/"+id);
+        $$("form_planning").load("products/show/"+id);
     }
 }

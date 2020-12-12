@@ -1,5 +1,7 @@
 import {JetView} from "webix-jet";
 
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 export default class IndexView extends JetView{
 	config(){
 		return {
@@ -27,7 +29,7 @@ export default class IndexView extends JetView{
 					onClick:{
 						"wxi-trash":function(event, id, node){
                             webix.confirm("Are you sure want to delete data ?").then(function(result){
-                                webix.ajax().post("http://localhost/products/delete/"+id).then(() => webix.message("Deleted"));
+                                webix.ajax().post("products/delete/"+id).then(() => webix.message("Deleted"));
                                 $$("tbl_fmea").remove(id);
                             });
                         },
@@ -36,7 +38,7 @@ export default class IndexView extends JetView{
                             //});
                         }                    
                     },                
-                    url: "http://localhost/products",
+                    url: "products",
                     select:true,
                     on:{
                         "onAfterSelect":function(){

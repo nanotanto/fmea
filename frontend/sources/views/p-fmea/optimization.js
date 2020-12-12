@@ -1,5 +1,7 @@
 import {JetView} from "webix-jet";
 
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 var saveAction = webix.proxy("rest", "http://localhost:80/actions/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
@@ -96,7 +98,7 @@ export default class OptimizationView extends JetView{
                             on:{
                                 "onAfterSelect":function(id){
                                     $$("tbl_action").clearAll();     
-                                    $$("tbl_action").load("http://localhost/actions/show/"+id);                                 
+                                    $$("tbl_action").load("actions/show/"+id);                                 
                                     $$("btn_add_action").enable();     
                                 }
                             }
@@ -127,7 +129,7 @@ export default class OptimizationView extends JetView{
 
                                     $$('tbl_action').editStop();
                                     var id = $$('tbl_action').add(data, 0);
-                                    $$("tbl_action_all").load("http://localhost/actions"); 
+                                    $$("tbl_action_all").load("actions"); 
                                     $$('tbl_action').editRow(id); 
                                     console.log(current_id);
                                     console.log(element);
@@ -182,7 +184,7 @@ export default class OptimizationView extends JetView{
                             onClick:{
                                 "wxi-trash":function(event, id, node){
                                     webix.confirm("Are you sure want to delete data ?").then(function(result){
-                                        webix.ajax().post("http://localhost/actions/delete/"+id).then(() => webix.message("Deleted"));
+                                        webix.ajax().post("actions/delete/"+id).then(() => webix.message("Deleted"));
                                         $$("tbl_action").remove(id);
                                     });
                                 }
@@ -222,10 +224,10 @@ export default class OptimizationView extends JetView{
 	}
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("http://localhost/products/show/"+id);
+        $$("form_planning").load("products/show/"+id);
     }
     init(){
-        $$("tbl_currents_all").load("http://localhost/currentsAll");
-        $$("tbl_action_all").load("http://localhost/actions");
+        $$("tbl_currents_all").load("currentsAll");
+        $$("tbl_action_all").load("actions");
     }
 }

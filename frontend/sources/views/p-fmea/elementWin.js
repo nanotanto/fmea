@@ -2,6 +2,8 @@
 import { DataLoader } from "webix";
 import {JetView} from "webix-jet";
 
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 export default class ElementWinView extends JetView{
 	config(){
 		return {
@@ -44,7 +46,7 @@ export default class ElementWinView extends JetView{
                                             "onAfterSelect":function(id){                                                
                                                 $$("form_element").clear();     
 
-                                                webix.ajax().get("http://localhost/elements/show/"+id,
+                                                webix.ajax().get("elements/show/"+id,
                                                     function (text,data,xhr){                                                    
                                                     var dt = data.json();
                                                     if (dt['length']===0) {
@@ -52,7 +54,7 @@ export default class ElementWinView extends JetView{
                                                         $$("btn_edit").hide();
                                                         $$("btn_save").show();
                                                     } else {
-                                                        $$("form_element").load("http://localhost/elements/show/"+id);
+                                                        $$("form_element").load("elements/show/"+id);
                                                         $$("btn_edit").show();
                                                         $$("btn_save").hide();
                                                     }
@@ -109,7 +111,7 @@ export default class ElementWinView extends JetView{
                                                                     var id = $$("_id").getValue();
                                                                     var data = $$("form_element").getValues();
                                                                     webix.confirm("Do you wont to edit data ?").then(function(result){
-                                                                        webix.ajax().put("http://localhost/elements/save/"+id, data).then(() => webix.message("Edited"));
+                                                                        webix.ajax().put("elements/save/"+id, data).then(() => webix.message("Edited"));
                                                                         //$$("btn_edit").disable();
                                                                     });
                                                                 }
@@ -117,7 +119,7 @@ export default class ElementWinView extends JetView{
                                                             { id:"btn_save","label": "Save", "view": "button", "css": "webix_primary", "width": 100, hidden:true,
                                                                 click:()=>{
                                                                     var data = $$("form_element").getValues();                                                                    webix.confirm("Do you wont to save data ?").then(function(result){
-                                                                        webix.ajax().post("http://localhost/elements/save", data).then(() => webix.message("Saved"));
+                                                                        webix.ajax().post("elements/save", data).then(() => webix.message("Saved"));
                                                                         $$("btn_save").hide();
                                                                         $("btn_edit").show();
                                                                     });

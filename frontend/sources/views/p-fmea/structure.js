@@ -1,6 +1,8 @@
 import {JetView} from "webix-jet";
 import ElementWinView from "views/p-fmea/elementWin";
 
+var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+
 var saveProcess = webix.proxy("rest", "http://localhost:80/processes/save", {
     meta: "csrf_field()", //some param
     save:function(view, params){
@@ -95,7 +97,7 @@ export default class StructureView extends JetView{
 
                                             $$('tbl_process').editStop();
                                             var id = $$('tbl_process').add(data, 0);
-                                            $$("tbl_process_all").load("http://localhost/processes"); 
+                                            $$("tbl_process_all").load("processes"); 
                                             $$('tbl_process').editRow(id);   
                                         }}
                                     ]
@@ -118,7 +120,7 @@ export default class StructureView extends JetView{
                                     onClick:{
                                         "wxi-trash":function(event, id, node){
                                             webix.confirm("Are you sure want to delete data ?").then(function(result){
-                                                webix.ajax().post("http://localhost/processes/delete/"+id).then(() => webix.message("Deleted"));
+                                                webix.ajax().post("processes/delete/"+id).then(() => webix.message("Deleted"));
                                                 $$("tbl_process").remove(id);
                                             });
                                         }
@@ -127,7 +129,7 @@ export default class StructureView extends JetView{
                                         "onAfterSelect":function(id){
                                             $$("btn_add_step").enable();     
                                             $$("tbl_step").clearAll();                         
-                                            $$("tbl_step").load("http://localhost/steps/show/"+id);                                             
+                                            $$("tbl_step").load("steps/show/"+id);                                             
                                             $$("btn_add_element").disable();
                                         }
                                     }
@@ -164,7 +166,7 @@ export default class StructureView extends JetView{
 
                                             $$('tbl_step').editStop();
                                             var id = $$('tbl_step').add(data, 0);
-                                            $$("tbl_step_all").load("http://localhost/steps"); 
+                                            $$("tbl_step_all").load("steps"); 
                                             $$('tbl_step').editRow(id);                   
                                         }}
                                     ]
@@ -187,7 +189,7 @@ export default class StructureView extends JetView{
                                     onClick:{
                                         "wxi-trash":function(event, id, node){
                                             webix.confirm("Are you sure want to delete data ?").then(function(result){
-                                                webix.ajax().post("http://localhost/steps/delete/"+id).then(() => webix.message("Deleted"));
+                                                webix.ajax().post("steps/delete/"+id).then(() => webix.message("Deleted"));
                                                 $$("tbl_step").remove(id);
                                             });
                                         }
@@ -214,9 +216,9 @@ export default class StructureView extends JetView{
                                             click:() => {          
                                                 this.win.showWindow();  
                                                 $$("tbl_process_step").clearAll();                                    
-                                                var Select_process = $$("tbl_process").getSelectedId();
+                                                var Select_process = $$("tbl_process").getSelectedItem();
                                                 var process_id = Select_process['id'];
-                                                $$("tbl_process_step").load('http://localhost/steps/show/'+process_id)         
+                                                $$("tbl_process_step").load('steps/show/'+process_id)         
                                                 $$("form_element").clear();                                        
                                            }
                                         }
@@ -252,12 +254,12 @@ export default class StructureView extends JetView{
     }
     init(){
         this.win = this.ui(ElementWinView);        
-        $$("tbl_process_all").load("http://localhost/processes");
-        $$("tbl_step_all").load("http://localhost/steps");
+        $$("tbl_process_all").load("processes");
+        $$("tbl_step_all").load("steps");
     }
     urlChange(view, url){
         var id = url[0].params.id;
-        $$("form_planning").load("http://localhost/products/show/"+id);
-        $$("tbl_process").load("http://localhost/processes/show/"+id);
+        $$("form_planning").load("products/show/"+id);
+        $$("tbl_process").load("processes/show/"+id);
     }
 }
