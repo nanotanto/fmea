@@ -11,7 +11,9 @@ class Process extends Model {
     protected $fillable = [
         'product_id',
         'name',
-        'function'
+        'function',
+        'function2',
+        'function3'
     ];
 
     public function step()

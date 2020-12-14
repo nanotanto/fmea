@@ -76,3 +76,5 @@ $router->post('/server/login', function () {
     //return $router->app->version();
     return view('login');
 });
+
+$router->get('fmea/{id}', 'FMEAController@show');

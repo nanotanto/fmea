@@ -12,7 +12,13 @@ export default class IndexView extends JetView{
                     "height": 34,
                     "cols": [
                         { "view": "button", "label": "New P-FMEA", "autowidth": true, "height": 0, "css":"webix_primary",
-                        click: "location.href='#!/top/p-fmea.new_planning'"
+                            click:()=>this.app.show("/top/p-fmea.new_planning")
+                        },
+                        { id:"btn_view", "view": "button", "label": "View P-FMEA Spreadsheet", disabled:true, "autowidth": true, "height": 0, "css":"webix_secondary",
+                            click:()=>{
+                                var fmea_id = $$("tbl_fmea").getSelectedId();
+                                this.app.show("/top/p-fmea.show?id="+fmea_id);
+                            }
                         }
                     ]
                 },
@@ -20,11 +26,13 @@ export default class IndexView extends JetView{
                     id:"tbl_fmea",
                     "view": "datatable", 
                     "columns": [
-                        {id:"eye", header:"", template:"<span class='webix_icon wxi-file'></span>", width:40},
+                        { id: 'id', hidden:true},                       
                         { "id": "number", "header": "P-FMEA ID Number", "fillspace": false, "width": 200},
                         { "id": "name", "header": "Product Name", "fillspace": true },
                         { "id": "issued", "header": "Prepared By", "fillspace": false, "width": 200 },                        
-                        {id:"trash", header:"", template:"{common.trashIcon()}", width:40}
+                        { header:"", template:"{common.trashIcon()}", width:40}
+                        
+
                     ],
 					onClick:{
 						"wxi-trash":function(event, id, node){
@@ -32,10 +40,6 @@ export default class IndexView extends JetView{
                                 webix.ajax().post("products/delete/"+id).then(() => webix.message("Deleted"));
                                 $$("tbl_fmea").remove(id);
                             });
-                        },
-                        "wxi-file":function(event, id, node){
-                            //webix.confirm("Do you want to open spreadsheet FMEA data ?").then(function(result){                                
-                            //});
                         }                    
                     },                
                     url: "products",
@@ -47,6 +51,7 @@ export default class IndexView extends JetView{
                             $$("btn_failure").enable();
                             $$("btn_risk").enable();
                             $$("btn_optimization").enable();
+                            $$("btn_view").enable();
                         }
                     }
 

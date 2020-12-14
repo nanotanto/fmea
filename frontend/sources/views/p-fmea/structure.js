@@ -1,7 +1,7 @@
 import {JetView} from "webix-jet";
 import ElementWinView from "views/p-fmea/elementWin";
-
-var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+import AddProcessView from "views/p-fmea/add_process";
+import AddStepView from "views/p-fmea/add_step";
 
 var saveProcess = webix.proxy("rest", "/processes/save", {
     meta: "csrf_field()", //some param
@@ -84,22 +84,26 @@ export default class StructureView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Process Item" },
-                                        { "view": "button", "label": "Add Process Item", "autowidth": true, "css": "webix_primary", click:function(){ 
-                                            var _id = $$('tbl_process_all').getLastId();
-                                            var product_id = $$("id").getValue();
-                                            // var data = { id:_id+1, product_id:product_id }
+                                        { "view": "button", "label": "Add Process Item", "autowidth": true, "css": "webix_primary", 
+                                        click:()=>this.winProcess.showWindow()
+                                        
+                                        // click:function(){ 
+                                        //     var _id = $$('tbl_process_all').getLastId();
+                                        //     var product_id = $$("id").getValue();
+                                        //     // var data = { id:_id+1, product_id:product_id }
 
-                                            if ( _id === undefined) {
-                                                var data = { id:1, product_id:product_id }
-                                            } else {
-                                                var data = { id:_id+1, product_id:product_id } 
-                                            }
+                                        //     if ( _id === undefined) {
+                                        //         var data = { id:1, product_id:product_id }
+                                        //     } else {
+                                        //         var data = { id:_id+1, product_id:product_id } 
+                                        //     }
 
-                                            $$('tbl_process').editStop();
-                                            var id = $$('tbl_process').add(data, 0);
-                                            $$("tbl_process_all").load("/processes"); 
-                                            $$('tbl_process').editRow(id);   
-                                        }}
+                                        //     $$('tbl_process').editStop();
+                                        //     var id = $$('tbl_process').add(data, 0);
+                                        //     $$("tbl_process_all").load("/processes"); 
+                                        //     $$('tbl_process').editRow(id);   
+                                        // }
+                                    }
                                     ]
                                 },
                                 {
@@ -107,8 +111,10 @@ export default class StructureView extends JetView{
                                     "columns": [
                                         { id:"id", hidden:true},
                                         { id:"product_id", hidden:true},
-                                        { "id": "name", "header": "Process Item Name", "width": 150, editor:"text" },
-                                        { "id": "function", "header": "Function", "fillspace": true, editor:"text" },                        
+                                        { "id": "name", "header": "Process Item Name", "width": 150, editor:"text" },   
+                                        { "id": "function", "header": "Function Your Plant", "fillspace": true, editor:"text"},
+                                        { "id": "function2", "header": "Function Ship to Plant", "fillspace": true, editor:"text"},
+                                        { "id": "function3", "header": "Function End User", "fillspace": true, editor:"text"},                    
                                         { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
                                     "view": "datatable",
@@ -152,23 +158,27 @@ export default class StructureView extends JetView{
                                     "height": 34,
                                     "cols": [
                                         { "view": "label", "label": "Process Step" },
-                                        { id:"btn_add_step", "view": "button", "label": "Add Process Step", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){ 
-                                            var _idstep = $$('tbl_step_all').getLastId();
-                                            var Select_process = $$("tbl_process").getSelectedId();
-                                            var process_id = Select_process['id'];
-                                            //var data = { id:_idstep+1, process_id:process_id }
+                                        { id:"btn_add_step", "view": "button", "label": "Add Process Step", "autowidth": true, "css": "webix_primary", disabled:true, 
+                                        click:()=>this.winStep.showWindow()
+                                        
+                                        // click:function(){ 
+                                        //     var _idstep = $$('tbl_step_all').getLastId();
+                                        //     var Select_process = $$("tbl_process").getSelectedId();
+                                        //     var process_id = Select_process['id'];
+                                        //     //var data = { id:_idstep+1, process_id:process_id }
 
-                                            if ( _idstep === undefined) {
-                                                var data = { id:1, process_id:process_id }
-                                            } else {
-                                                var data = { id:_idstep+1, process_id:process_id }
-                                            }
+                                        //     if ( _idstep === undefined) {
+                                        //         var data = { id:1, process_id:process_id }
+                                        //     } else {
+                                        //         var data = { id:_idstep+1, process_id:process_id }
+                                        //     }
 
-                                            $$('tbl_step').editStop();
-                                            var id = $$('tbl_step').add(data, 0);
-                                            $$("tbl_step_all").load("/steps"); 
-                                            $$('tbl_step').editRow(id);                   
-                                        }}
+                                        //     $$('tbl_step').editStop();
+                                        //     var id = $$('tbl_step').add(data, 0);
+                                        //     $$("tbl_step_all").load("/steps"); 
+                                        //     $$('tbl_step').editRow(id);                   
+                                        // }
+                                    }
                                     ]
                                 },
                                 {
@@ -176,8 +186,8 @@ export default class StructureView extends JetView{
                                     "columns": [
                                         { id:"id", hidden:true},
                                         { id:"process_id", hidden:true},
-                                        { "id": "name", "header": "Process Step Name", "width": 150, "fillspace": false, editor:"text" },
-                                        { "id": "function", "header": "Function", "fillspace": true, editor:"text"},
+                                        { "id": "name", "header": "Process Step Name", "fillspace": true, editor:"text" },
+                                        { "id": "function", "header": "Function", "fillspace": true, editor:"text" }, 
                                         { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
                                     "view": "datatable",
@@ -253,7 +263,9 @@ export default class StructureView extends JetView{
         }
     }
     init(){
-        this.win = this.ui(ElementWinView);        
+        this.win = this.ui(ElementWinView);   
+        this.winProcess = this.ui(AddProcessView);   
+        this.winStep = this.ui(AddStepView);      
         $$("tbl_process_all").load("/processes");
         $$("tbl_step_all").load("/steps");
     }

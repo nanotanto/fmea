@@ -52,16 +52,15 @@ export default class PlanningView extends JetView{
                                         { name:"respons","label": "Process Responsibility", "view": "text", "labelPosition": "top"},
                                         {
                                             name:"level","label": "Confidentiality Level",
-                                            "options": [],
                                             "view": "select",
                                             "height": 50,
                                             "labelPosition": "top",
-                                            options:["Low","Medium","High"]
+                                            options:["Business Use","Proprietary","Confidential"]
                                         },
                                         {
                                             "cols": [
                                                 { "view": "template", "role": "placeholder", "borderless": true },
-                                                { id:"btn_edit", "label": "Edit", "view": "button", "css": "webix_primary", "width": 100,
+                                                { id:"btn_edit2", "label": "Edit", "view": "button", "css": "webix_primary", "width": 100,
                                                 click:function(){
                                                     var form = this.getFormView();
                                                     if (form.validate()){

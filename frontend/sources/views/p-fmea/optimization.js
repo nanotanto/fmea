@@ -130,7 +130,8 @@ export default class OptimizationView extends JetView{
                                     $$('tbl_action').editStop();
                                     var id = $$('tbl_action').add(data, 0);
                                     $$("tbl_action_all").load("/actions"); 
-                                    $$('tbl_action').editRow(id); 
+                                    //$$('tbl_action').editRow(id); 
+                                    $$('tbl_action').editCell(id, "cause", true, true);
                                     console.log(current_id);
                                     console.log(element);
                                     console.log(Select_mode);
@@ -145,7 +146,7 @@ export default class OptimizationView extends JetView{
                                 { id:"mode_id", hidden:true},
                                 { id:"current_id", hidden:true},
                                 { id:"element", hidden:true},
-                                { "id": "cause", editor:"text", "header": "Failure Cause (FC)", "fillspace": false, "sort": "string", "hidden": false },
+                                { "id": "cause", editor:"text", "header": "Failure Cause (FC)", "fillspace": false, "sort": "string", "hidden": false, "width": 200 },
                                 {
                                     "id": "prevention",editor:"text", 
                                     "header": "Prevention Action Plan",

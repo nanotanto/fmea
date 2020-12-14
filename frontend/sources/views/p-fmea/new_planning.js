@@ -52,11 +52,10 @@ export default class PlanningView extends JetView{
                                         { name:"respons","label": "Process Responsibility", "view": "text", "labelPosition": "top"},
                                         {
                                             name:"level","label": "Confidentiality Level",
-                                            "options": [],
                                             "view": "select",
                                             "height": 50,
                                             "labelPosition": "top",
-                                            options:["Low","Medium","High"]
+                                            options:["Business Use","Proprietary","Confidential"]
                                         },
                                         {
                                             "cols": [
