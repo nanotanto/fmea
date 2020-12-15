@@ -70,6 +70,7 @@ export default class PlanningView extends JetView{
                                                             webix.ajax().post("products/save", data).then(() => webix.message("Saved"))
                                                             .then(()=>$$('form_planning').load("/products/newFmea"));
                                                             $$("btn_save").disable();
+                                                            $$("btn_new_next").enable();
                                                         });
                                                         // .fail(function(){
                                                         //   webix.message("Cancel");
@@ -121,7 +122,7 @@ export default class PlanningView extends JetView{
                             }
                         },
                         { "view": "label" },
-                        { "label": "Next", "view": "button", "height": 0, "width": 100, "css": "webix_danger", 
+                        { id:"btn_new_next","label": "Next", "view": "button", "height": 0, "width": 100, "css": "webix_danger", disabled:true,
                             click: () => {
                                 var id = $$("id").getValue();
                                 this.app.show("/top/p-fmea.structure?id="+id);

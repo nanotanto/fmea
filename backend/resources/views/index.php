@@ -6,7 +6,7 @@
 	<title></title>
 	<!-- Webix Library -->
 	<script type="text/javascript" src="webix/webix.js"></script>
-	<link rel="stylesheet" type="text/css" href="webix/skins/compact.css">
+	<link rel="stylesheet" type="text/css" href="webix/skins/mini.css">
 
 	<!-- App -->
 	<script type="text/javascript" src="codebase/app.js"></script>

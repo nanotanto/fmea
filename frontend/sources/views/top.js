@@ -7,7 +7,7 @@ export default class TopView extends JetView{
 			view:"toolbar", height:50,
 			css:"webix_dark", padding:{ left:8 },
 			elements:[
-				{ view:"label", label:"FMEA Software" },				
+				{ view:"label", label:"FMEA AIAG-VDA Software" },				
 				{ $template:"Separator" },
 				{ value: "Logout", view: "button", width:60, id: "logout", click: () => {
 					this.app.show("/logout");

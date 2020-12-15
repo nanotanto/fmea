@@ -1,7 +1,5 @@
 import {JetView} from "webix-jet";
 
-var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
-
 export default class IndexView extends JetView{
 	config(){
 		return {
@@ -28,7 +26,7 @@ export default class IndexView extends JetView{
                     "columns": [
                         { id: 'id', hidden:true},                       
                         { "id": "number", "header": "P-FMEA ID Number", "fillspace": false, "width": 200},
-                        { "id": "name", "header": "Product Name", "fillspace": true },
+                        { "id": "subject", "header": "Subject", "fillspace": true },
                         { "id": "issued", "header": "Prepared By", "fillspace": false, "width": 200 },                        
                         { header:"", template:"{common.trashIcon()}", width:40}
                         

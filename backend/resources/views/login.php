@@ -22,7 +22,7 @@ if (isset($_GET["status"])){
 	// very naive implementation
 	// do not use it in a production
 
-	if ($user === "admin" && $pass === "admin"){
+	if ($user === "demo" && $pass === "demo"){
 		$user = [
 			"name" => "admin",
 			"role" => "admin", 
