@@ -41,15 +41,15 @@ class FMEAController extends Controller
                     'actions.finish_date as finish_date',
                     'actions.o as o2',
                     'actions.d as d2',
-                    'currents.ap as ap2', 
-                    'currents.sc as sc2',
-                    'currents.action as action'
+                    'actions.ap as ap2', 
+                    'actions.sc as sc2',
+                    'actions.action as action'
                 )
                 ->leftJoin('processes','processes.product_id','=','products.id')
                 ->leftJoin('steps','steps.process_id','=','processes.id')
                 ->leftJoin('elements','elements.step_id','=','steps.id')
-                ->leftJoin('modes','modes.step_id','=','steps.id')
-                ->leftJoin('currents','currents.mode_id','=','modes.id')
+                ->Join('modes','modes.step_id','=','steps.id')
+                ->Join('currents','currents.mode_id','=','modes.id')
                 ->leftJoin('actions','actions.current_id','=','currents.id')
                 ->where('products.id',$id)
                 ->get();

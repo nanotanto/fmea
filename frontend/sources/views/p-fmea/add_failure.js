@@ -33,12 +33,12 @@ export default class AddFailureView extends JetView{
                                             { "label": "Category :", "options": ["","Product","Process"], "view": "select", "name": "category" }
                                         ]
                                     },
-                                    { "label": "Failure Effects (FE) In Line :", "view": "text", "name": "effect_in" },
-                                    { "label": "Failure Effects (FE) to Next Process :", "view": "text", "name": "effect_next" },
-                                    { "label": "Failure Effects (FE) to Customer/ End User :", "view": "text", "name": "effect_end" },
+                                    { "label": "Failure Effects (FE) to Your Plant :", "view": "text", "name": "effect_in" },
+                                    { "label": "Failure Effects (FE) Ship to Plant :", "view": "text", "name": "effect_next" },
+                                    { "label": "Failure Effects (FE) to End User :", "view": "text", "name": "effect_end" },
                                     {
                                         "cols": [
-                                            { "label": "Severity", "options": ["1","2","3","4","5","6","7","8","9","10"], "view": "select", "name": "s" },
+                                            { id:"s","label": "Severity", "options": ["1","2","3","4","5","6","7","8","9","10"], "view": "select", "name": "s" },
                                             { "view": "template", "role": "placeholder", "borderless": true, "gravity": 5 }
                                         ]
                                     },
@@ -54,6 +54,7 @@ export default class AddFailureView extends JetView{
                                                     var Select_process = $$("tbl_process_step2").getSelectedItem();
                                                     var step_id = Select_process['id'];
                                                     $$("id_step").setValue(step_id);  
+                                                    $$("s").setValue(1); 
                                                 }
                                             },
                                             { id:"btn_save_mode", "view": "button", "label": "Save", "css": "webix_primary", 

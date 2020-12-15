@@ -1,6 +1,5 @@
 import {JetView} from "webix-jet";
-
-var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+import AddActionView from "views/p-fmea/add_action"
 
 var saveAction = webix.proxy("rest", "/actions/save", {
     meta: "csrf_field()", //some param
@@ -93,6 +92,18 @@ export default class OptimizationView extends JetView{
                                 { "id": "ap", "header": "AP", "width": 70, "fillspace": false, "hidden": false },
                                 { "id": "sc", "header": "Spec. Char.", "sort": "string", "fillspace": false, "hidden": false }
                             ],
+                            ready:function(){ 
+                                this.adjustColumn("item"); 
+                                this.adjustColumn("step"); 
+                                this.adjustColumn("mode"); 
+                                this.adjustColumn("category"); 
+                                this.adjustColumn("element"); 
+                                this.adjustColumn("cause"); 
+                                this.adjustColumn("prevention"); 
+                                this.adjustColumn("detection"); 
+                                this.adjustColumn("ap"); 
+                                this.adjustColumn("sc"); 
+                            },
                             "view": "datatable",
                             select:true,
                             on:{
@@ -109,33 +120,36 @@ export default class OptimizationView extends JetView{
                             "height": 34,
                             "cols": [
                                 { "view": "label", "label": "Action" },
-                                { id:"btn_add_action", "view": "button", "label": "Add Action", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){
-                                    var _idaction = $$('tbl_action_all').getLastId();
-                                    var Select_mode = $$("tbl_currents_all").getSelectedItem();
-                                    var mode_id = Select_mode['id'];
-                                    var current_id = Select_mode['current_id'];
-                                    var element = Select_mode['element'];
-                                    var o = Select_mode['o'];
-                                    var d = Select_mode['d'];
-                                    var s = Select_mode['s'];
-                                    //var data = { id:_idaction+1, mode_id:mode_id, current_id:current_id, element:element, s:0, o:0, d:0 }
+                                { id:"btn_add_action", "view": "button", "label": "Add Action", "autowidth": true, "css": "webix_primary", disabled:true, 
+                                    click:()=> this.winAction.showWindow()
 
-                                    if ( _idaction === undefined) {
-                                        var data = { id:1, mode_id:mode_id, current_id:current_id, element:element, s:s, o:o, d:d }
-                                    } else {
-                                        var data = { id:_idaction+1, mode_id:mode_id, current_id:current_id, element:element, s:s, o:o, d:d }
-                                    }
+                                    // click:function(){
+                                    //     var _idaction = $$('tbl_action_all').getLastId();
+                                    //     var Select_mode = $$("tbl_currents_all").getSelectedItem();
+                                    //     var mode_id = Select_mode['id'];
+                                    //     var current_id = Select_mode['current_id'];
+                                    //     var element = Select_mode['element'];
+                                    //     var o = Select_mode['o'];
+                                    //     var d = Select_mode['d'];
+                                    //     var s = Select_mode['s'];
+                                    //     //var data = { id:_idaction+1, mode_id:mode_id, current_id:current_id, element:element, s:0, o:0, d:0 }
+
+                                    //     if ( _idaction === undefined) {
+                                    //         var data = { id:1, mode_id:mode_id, current_id:current_id, element:element, s:s, o:o, d:d }
+                                    //     } else {
+                                    //         var data = { id:_idaction+1, mode_id:mode_id, current_id:current_id, element:element, s:s, o:o, d:d }
+                                    //     }
 
 
-                                    $$('tbl_action').editStop();
-                                    var id = $$('tbl_action').add(data, 0);
-                                    $$("tbl_action_all").load("/actions"); 
-                                    //$$('tbl_action').editRow(id); 
-                                    $$('tbl_action').editCell(id, "cause", true, true);
-                                    console.log(current_id);
-                                    console.log(element);
-                                    console.log(Select_mode);
-                                    }
+                                    //     $$('tbl_action').editStop();
+                                    //     var id = $$('tbl_action').add(data, 0);
+                                    //     $$("tbl_action_all").load("/actions"); 
+                                    //     //$$('tbl_action').editRow(id); 
+                                    //     $$('tbl_action').editCell(id, "cause", true, true);
+                                    //     console.log(current_id);
+                                    //     console.log(element);
+                                    //     console.log(Select_mode);
+                                    // }
                                 }
                             ]
                         },
@@ -146,7 +160,7 @@ export default class OptimizationView extends JetView{
                                 { id:"mode_id", hidden:true},
                                 { id:"current_id", hidden:true},
                                 { id:"element", hidden:true},
-                                { "id": "cause", editor:"text", "header": "Failure Cause (FC)", "fillspace": false, "sort": "string", "hidden": false, "width": 200 },
+                                { "id": "cause", editor:"text", "header": "Failure Cause (FC)", "fillspace": false, "sort": "string", "hidden": true, "width": 200 },
                                 {
                                     "id": "prevention",editor:"text", 
                                     "header": "Prevention Action Plan",
@@ -168,7 +182,7 @@ export default class OptimizationView extends JetView{
                                 { "id": "status",editor:"select",options:["Open","Closed"], "header": "Status", "sort": "string", "fillspace": false, "hidden": false },
                                 { "id": "prevention_act", editor:"text","header": "Prevention Action Taken", "fillspace": false, "hidden": false, "width": 250 },
                                 { "id": "detection_act", editor:"text","header": "Detection Action Taken", "fillspace": false, "hidden": false, "width": 250 },
-                                { "id": "finish_date", editor:"date","header": "Finish Date", "fillspace": false, "hidden": false },
+                                { "id": "finish_date", editor:"date","header": "Completion Date", "fillspace": false, "hidden": false },
                                 //{ "id": "s",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "S", "width": 35, "fillspace": false, "hidden": false },
                                 { "id": "o",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "O", "width": 35, "fillspace": false, "hidden": false },
                                 { "id": "d",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "D", "width": 35, "fillspace": false, "hidden": false },
@@ -176,6 +190,17 @@ export default class OptimizationView extends JetView{
                                 { "id": "sc", editor:"select",options:["Safety","Emission","Regulation"], "header": "Spec. Char.", "width": 80, "fillspace": false, "hidden": false },
                                 { header:"", template:"{common.trashIcon()}", width:40}
                             ],
+                            ready:function(){ 
+                                this.adjustColumn("cause"); 
+                                this.adjustColumn("prevention"); 
+                                this.adjustColumn("detection"); 
+                                this.adjustColumn("pic"); 
+                                this.adjustColumn("finish_date"); 
+                                this.adjustColumn("prevention_act"); 
+                                this.adjustColumn("detection_act"); 
+                                this.adjustColumn("ap"); 
+                                this.adjustColumn("sc"); 
+                            },
                             "view": "datatable",
                             "height": 120,
                             select:true,
@@ -230,5 +255,6 @@ export default class OptimizationView extends JetView{
     init(){
         $$("tbl_currents_all").load("/currentsAll");
         $$("tbl_action_all").load("/actions");
+        this.winAction = this.ui(AddActionView); 
     }
 }

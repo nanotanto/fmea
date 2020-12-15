@@ -1,6 +1,5 @@
 import {JetView} from "webix-jet";
-
-var url = window.location.protocol +"//"+ window.location.hostname+":"+window.location.port+window.location.pathname;
+import AddConditionView from "views/p-fmea/add_condition"
 
 var saveCurrent = webix.proxy("rest", "/currents/save", {
     meta: "csrf_field()", //some param
@@ -82,11 +81,20 @@ export default class RiskView extends JetView{
                                 { "id": "step", "header": "Process Step", "width": 150, "fillspace": false, "hidden": false },
                                 { "id": "mode", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
                                 { "id": "category", "header": "Category", "width": 150, "fillspace": false, "hidden": false },
-                                { "id": "in", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect In Line"], "fillspace": true, "hidden": false },
-                                { "id": "next", "header": [{},"Effect to Next Process"], "fillspace": true, "hidden": false },
-                                { "id": "end", "header": [{},"Effect to Customer/ End User"], "fillspace": true, "hidden": false },
-                                { "id": "s", "header": ["Severity","<center>S</center>"], "width": 60, "fillspace": false, "hidden": false }
+                                { "id": "in", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect to Your Plant"], "fillspace": true, "hidden": false },
+                                { "id": "next", "header": [{},"Effect to Ship to Plant"], "fillspace": true, "hidden": false },
+                                { "id": "end", "header": [{},"Effect to End User"], "fillspace": true, "hidden": false },
+                                { "id": "s", "header": ["Severity","<center>(S)</center>"], "width": 60, "fillspace": false, "hidden": false }
                             ],
+                            ready:function(){ 
+                                this.adjustColumn("item"); 
+                                this.adjustColumn("step"); 
+                                this.adjustColumn("mode"); 
+                                this.adjustColumn("category"); 
+                                this.adjustColumn("in"); 
+                                this.adjustColumn("next"); 
+                                this.adjustColumn("end"); 
+                            },
                             "view": "datatable",
                             select:true,
                             on:{
@@ -103,23 +111,27 @@ export default class RiskView extends JetView{
                             "height": 34,
                             "cols": [
                                 { "view": "label", "label": "Current Condition" },
-                                { id:"btn_add_current","view": "button", "label": "Add Current Condition", "autowidth": true, "css": "webix_primary", disabled:true, click:function(){
-                                    var _idcurrent = $$('tbl_current_all').getLastId();
-                                    var Select_mode = $$("tbl_modes_all").getSelectedId();
-                                    var mode_id = Select_mode['id'];
-                                    //var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
+                                { id:"btn_add_current","view": "button", "label": "Add Current Condition", "autowidth": true, "css": "webix_primary", disabled:true, 
+                                    click:()=> this.winCondition.showWindow()
 
-                                    if ( _idcurrent === undefined) {
-                                        var data = { id:1, mode_id:mode_id, o:1, d:1 }
-                                    } else {
-                                        var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
-                                    }
+                                    // click:function(){
+                                    //     var _idcurrent = $$('tbl_current_all').getLastId();
+                                    //     var Select_mode = $$("tbl_modes_all").getSelectedId();
+                                    //     var mode_id = Select_mode['id'];
+                                    //     //var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
 
-                                    $$('tbl_current').editStop();
-                                    var id = $$('tbl_current').add(data, 0);
-                                    $$("tbl_current_all").load("/currents"); 
-                                    $$('tbl_current').editRow(id); 
-                                    }
+                                    //     if ( _idcurrent === undefined) {
+                                    //         var data = { id:1, mode_id:mode_id, o:1, d:1 }
+                                    //     } else {
+                                    //         var data = { id:_idcurrent+1, mode_id:mode_id, o:1, d:1 }
+                                    //     }
+
+                                    //     $$('tbl_current').editStop();
+                                    //     var id = $$('tbl_current').add(data, 0);
+                                    //     $$("tbl_current_all").load("/currents"); 
+                                    //     $$('tbl_current').editRow(id); 
+                                        
+                                    // }
                                 }
                             ]
                         },
@@ -138,6 +150,14 @@ export default class RiskView extends JetView{
                                 { "id": "sc",editor:"select",options:["Safety","Emission","Regulation"],  "header": "Spec. Char.", "sort": "string", "fillspace": false, "hidden": false },
                                 { header:"", template:"{common.trashIcon()}", width:40}
                             ],
+                            ready:function(){ 
+                                this.adjustColumn("element"); 
+                                this.adjustColumn("cause"); 
+                                this.adjustColumn("prevention"); 
+                                this.adjustColumn("detection"); 
+                                this.adjustColumn("ap"); 
+                                this.adjustColumn("sc"); 
+                            },
                             "view": "datatable",
                             "height": 120,
                             select:true,
@@ -192,5 +212,6 @@ export default class RiskView extends JetView{
     init(){
         $$("tbl_modes_all").load("/modesAll");
         $$("tbl_current_all").load("/currents");
+        this.winCondition = this.ui(AddConditionView);  
     }
 }

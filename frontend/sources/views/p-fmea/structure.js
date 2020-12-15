@@ -111,12 +111,18 @@ export default class StructureView extends JetView{
                                     "columns": [
                                         { id:"id", hidden:true},
                                         { id:"product_id", hidden:true},
-                                        { "id": "name", "header": "Process Item Name", "width": 150, editor:"text" },   
-                                        { "id": "function", "header": "Function Your Plant", "fillspace": true, editor:"text"},
-                                        { "id": "function2", "header": "Function Ship to Plant", "fillspace": true, editor:"text"},
-                                        { "id": "function3", "header": "Function End User", "fillspace": true, editor:"text"},                    
+                                        { "id": "name", "header": "Process Item", "width": 150, editor:"text" },   
+                                        { "id": "function", "header": "Function (Your Plant)", "fillspace": true, editor:"text"},
+                                        { "id": "function2", "header": "Function (Ship to Plant)", "fillspace": true, editor:"text"},
+                                        { "id": "function3", "header": "Function (End User)", "fillspace": true, editor:"text"},                    
                                         { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
+                                    ready:function(){ 
+                                        this.adjustColumn("name"); 
+                                        this.adjustColumn("function"); 
+                                        this.adjustColumn("function2"); 
+                                        this.adjustColumn("function3"); 
+                                    },
                                     "view": "datatable",
                                     responsive:true, 
                                     select:true,
@@ -186,10 +192,14 @@ export default class StructureView extends JetView{
                                     "columns": [
                                         { id:"id", hidden:true},
                                         { id:"process_id", hidden:true},
-                                        { "id": "name", "header": "Process Step Name", "fillspace": true, editor:"text" },
+                                        { "id": "name", "header": "Process Step", "fillspace": true, editor:"text" },
                                         { "id": "function", "header": "Function", "fillspace": true, editor:"text" }, 
                                         { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
+                                    ready:function(){ 
+                                        this.adjustColumn("name"); 
+                                        this.adjustColumn("function"); 
+                                    },
                                     "view": "datatable",
                                     responsive:true, 
                                     select:true,

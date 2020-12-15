@@ -35,6 +35,10 @@ export default class ElementWinView extends JetView{
                                             { "id": "process_id", "header": "Process Item", "fillspace": true, "hidden": false },
                                             { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                         ],
+                                        ready:function(){ 
+                                            this.adjustColumn("process_id"); 
+                                            this.adjustColumn("name"); 
+                                        },
                                         "view": "datatable",
                                         select:true,
                                         scheme:{
@@ -82,27 +86,29 @@ export default class ElementWinView extends JetView{
                                                 "rows": [                                                    
                                                     { id:"_id", name:"id", "label": "ID", "view": "text", "labelPosition": "top", hidden:true },
                                                     { id:"step_id", name:"step_id", "label": "Step_id", "view": "text", "labelPosition": "top", hidden:true },                                                    
-                                                    { name:"man", "label": "Man", "view": "text", "labelPosition": "top" },
-                                                    { name:"machine", "label": "Machine", "view": "text", "labelPosition": "top" },
-                                                    { name:"material", "label": "Material", "view": "text", "labelPosition": "top" },
-                                                    { name:"method", "label": "Method", "view": "text", "labelPosition": "top" },
-                                                    { name:"measure", "label": "Measurement", "view": "text", "labelPosition": "top" },
-                                                    { name:"enviro", "label": "Environment", "view": "text", "labelPosition": "top" },
-                                                    { "view": "template", "role": "placeholder", "borderless": true }
-                                                ],
-                                                //"margin": 10,
-                                                "padding": { "right": 10 },
-                                                "borderless": true,
-                                                "width": 150
-                                            },
-                                            {
-                                                "rows": [
-                                                    { name:"func_man", "label": "Function of Man", "view": "text", "labelPosition": "top" },
-                                                    { name:"func_machine", "label": "Function of Machine", "view": "text", "labelPosition": "top" },
-                                                    { name:"func_material", "label": "Function of Material", "view": "text", "labelPosition": "top" },
-                                                    { name:"func_method", "label": "Function of Method", "view": "text", "labelPosition": "top" },
-                                                    { name:"func_measure", "label": "Function of Measurement", "view": "text", "labelPosition": "top" },
-                                                    { name:"func_enviro", "label": "Function of Environment", "view": "text",  "labelPosition": "top" },
+                                                    { cols:[                                                        
+                                                        { name:"man", "label": "Man", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_man", "label": "Function of Man", "view": "textarea", "labelPosition": "top" },
+                                                    ]},
+                                                    { cols:[ 
+                                                        { name:"machine", "label": "Machine", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_machine", "label": "Function of Machine", "view": "textarea", "labelPosition": "top" },
+                                                    ]},
+                                                    
+                                                    { cols:[ 
+                                                        { name:"material", "label": "Material", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_material", "label": "Function of Material", "view": "textarea", "labelPosition": "top" },
+                                                    ]},{ cols:[ 
+                                                        { name:"method", "label": "Method", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_method", "label": "Function of Method", "view": "textarea", "labelPosition": "top" },
+                                                    ]},{ cols:[ 
+                                                        { name:"measure", "label": "Measurement", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_measure", "label": "Function of Measurement", "view": "textarea", "labelPosition": "top" },
+                                                    ]},{ cols:[ 
+                                                        { name:"enviro", "label": "Environment", "view": "text", "labelPosition": "top","width": 150 },
+                                                        { name:"func_enviro", "label": "Function of Environment", "view": "textarea",  "labelPosition": "top" },
+                                                    ]},
+
                                                     {
                                                         "cols": [
                                                             { "view": "template", "role": "placeholder", "borderless": true },
@@ -118,7 +124,8 @@ export default class ElementWinView extends JetView{
                                                             },
                                                             { id:"btn_save","label": "Save", "view": "button", "css": "webix_primary", "width": 100, hidden:true,
                                                                 click:()=>{
-                                                                    var data = $$("form_element").getValues();                                                                    webix.confirm("Do you wont to save data ?").then(function(result){
+                                                                    var data = $$("form_element").getValues();                                                                    
+                                                                    webix.confirm("Do you wont to save data ?").then(function(result){
                                                                         webix.ajax().post("elements/save", data).then(() => webix.message("Saved"));
                                                                         $$("btn_save").hide();
                                                                         $("btn_edit").show();
@@ -126,19 +133,14 @@ export default class ElementWinView extends JetView{
                                                                 }
                                                             }
                                                         ]
-                                                    },
-                                                    { "view": "template", "role": "placeholder", "borderless": 1 }
-                                                ],
-                                                //"margin": 10,
-                                                "padding": { "left": 10 },
-                                                "borderless": true,
-                                                "width": 0
-                                            }
+                                                    },             
+                                                    { "view": "template", "role": "placeholder", "borderless": true }
+                                                ]
+                                            },
                                         ],
                                         "borderless": true
                                     }
                                 ],
-                                //"padding": { "top": 30 },
                                 "width": 0
                             }
                         ]

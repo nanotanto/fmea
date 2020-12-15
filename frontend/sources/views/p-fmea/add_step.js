@@ -6,7 +6,7 @@ export default class AddStepView extends JetView{
             view:"popup",
             position:"center",
             width:900,
-            height:200,
+            height:250,
             select:true,
             body:{
                 type:"wide", rows:[
@@ -25,9 +25,12 @@ export default class AddStepView extends JetView{
                         id:"form_step",
                         "rows": [
                             {
-                                "cols": [
+                                "rows": [
                                     { id:"id_process",name:"process_id", "label": "ID", "view": "text", "labelPosition": "top", hidden:true, },
-                                    { "label": "Process Step Name :", "view": "text", "labelPosition": "top", "name": "name" },
+                                    { cols:[
+                                        { "label": "Process Step :", "view": "text", "labelPosition": "top", "name": "name" },
+                                        {}
+                                    ]},
                                     { "label": "Function of Process Step :", "view": "text", "labelPosition": "top", "name": "function" }
                                 ]
                             },

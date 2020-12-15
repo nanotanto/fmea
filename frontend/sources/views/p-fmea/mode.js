@@ -82,6 +82,10 @@ export default class ModeView extends JetView{
                                         { "id": "process_id", "header": "Process item", "fillspace": true, "hidden": false },
                                         { "id": "name", "header": "Process Step", "fillspace": true, "hidden": false }
                                     ],
+                                    ready:function(){ 
+                                        this.adjustColumn("process_id"); 
+                                        this.adjustColumn("name"); 
+                                    },
                                     "view": "datatable",                                    
                                     // scheme:{
                                     //     $init:function(row){
@@ -141,12 +145,19 @@ export default class ModeView extends JetView{
                                         { id:"step_id", hidden:true},
                                         { "id": "name", editor:"text", "header": "Failure Mode (FM)", "width": 150, "fillspace": false, "hidden": false },
                                         { "id": "category", editor:"select",options:["Product","Process"], "header": "Category", "width": 80, "fillspace": false, "hidden": false },
-                                        { "id": "effect_in", editor:"text", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect In Line"], "fillspace": true, "hidden": false },
-                                        { "id": "effect_next", editor:"text", "header": [{},"Effect to Next Process"], "fillspace": true, "hidden": false },
-                                        { "id": "effect_end", editor:"text", "header": [{},"Effect to Customer/ End User"], "fillspace": true, "hidden": false },
+                                        { "id": "effect_in", editor:"text", "header": [{ text:"<center>Failure Effects (FE)</center>", colspan:3 },"Effect to Your Plant"], "fillspace": true, "hidden": false },
+                                        { "id": "effect_next", editor:"text", "header": [{},"Effect to Ship to Plant"], "fillspace": true, "hidden": false },
+                                        { "id": "effect_end", editor:"text", "header": [{},"Effect to End User"], "fillspace": true, "hidden": false },
                                         { "id": "s", editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": ["Severity","<center>(S)</center>"], "width": 60, "fillspace": false, "hidden": false },
                                         { header:"", template:"{common.trashIcon()}", width:40}
                                     ],
+                                    ready:function(){ 
+                                        this.adjustColumn("name"); 
+                                        this.adjustColumn("category"); 
+                                        this.adjustColumn("effect_in"); 
+                                        this.adjustColumn("effect_next"); 
+                                        this.adjustColumn("effect_end"); 
+                                    },
                                     "view": "datatable",
                                     select:true,
                                     editable:true,
