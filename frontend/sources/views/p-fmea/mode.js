@@ -171,13 +171,14 @@ export default class ModeView extends JetView{
                                             });
                                         }
                                     }
-                                },                                
-                                {
-                                    id:'tbl_mode_all',
-                                    "view": "datatable",
-                                    columns:[{id:"id"}],
-                                    hidden:true,
                                 }
+                                // /,                                
+                                // {
+                                //     id:'tbl_mode_all',
+                                //     "view": "datatable",
+                                //     columns:[{id:"id"}],
+                                //     hidden:true,
+                                // }
                             ],
                             "width": 0
                         }
@@ -211,10 +212,10 @@ export default class ModeView extends JetView{
         var id = url[0].params.id;
         $$("form_planning").load("/products/show/"+id);
         $$("tbl_process_step2").load("/process_steps/"+id);
+        $$("tbl_mode").load("/modes/"+id);
     }
     init(){
-        $$("tbl_mode_all").load("/modes");
-        $$("tbl_mode").load("/modes");
+        //$$("tbl_mode_all").load("/modes/");
         this.winFailure = this.ui(AddFailureView);  
     }
 }

@@ -208,9 +208,9 @@ export default class RiskView extends JetView{
     urlChange(view, url){
         var id = url[0].params.id;
         $$("form_planning").load("/products/show/"+id);
+        $$("tbl_modes_all").load("/modesAll/"+id);
     }
     init(){
-        $$("tbl_modes_all").load("/modesAll");
         $$("tbl_current_all").load("/currents");
         this.winCondition = this.ui(AddConditionView);  
     }

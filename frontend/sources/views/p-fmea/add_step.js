@@ -6,7 +6,7 @@ export default class AddStepView extends JetView{
             view:"popup",
             position:"center",
             width:900,
-            height:250,
+            height:270,
             select:true,
             body:{
                 type:"wide", rows:[

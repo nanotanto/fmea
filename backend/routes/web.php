@@ -30,7 +30,7 @@ $router->post('actions/save', 'ActionController@save');
 $router->put('actions/save/{id}', 'ActionController@update');
 $router->post('actions/delete/{id}', 'ActionController@delete');
 
-$router->get('currentsAll', 'CurrentController@indexAll');
+$router->get('currentsAll/{id}', 'CurrentController@indexAll');
 $router->get('currents', 'CurrentController@index');
 $router->get('currents/show/{id}', 'CurrentController@show');
 $router->post('currents/save', 'CurrentController@save');
@@ -43,8 +43,8 @@ $router->post('elements/save', 'ElementController@save');
 $router->put('elements/save/{id}', 'ElementController@update');
 $router->post('elements/delete/{id}', 'ElementController@delete');
 
-$router->get('modesAll', 'ModeController@indexAll');
-$router->get('modes', 'ModeController@index');
+$router->get('modesAll/{id}', 'ModeController@indexAll');
+$router->get('modes/{id}', 'ModeController@index');
 $router->get('modes/show/{id}', 'ModeController@show');
 $router->post('modes/save', 'ModeController@save');
 $router->put('modes/save/{id}', 'ModeController@update');

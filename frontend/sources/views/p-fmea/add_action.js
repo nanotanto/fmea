@@ -27,8 +27,8 @@ export default class AddActionView extends JetView{
 		{ id:"mode_name","view": "text", "label": "Failure Mode (FM)", "name": "mode", readonly:true },
 		
 		{ id:"cause_name", "label": "Failure Cause (FC)", "view": "text", "name": "cause", readonly:true },
-		{ "label": "Prevention Action Plan", "view": "text", "name": "prevention" },		
-		{ "label": "Detection Action Plan", "view": "text", "name": "detection" },
+		{ "label": "Prevention Action Plan", "view": "text", "name": "prevention_act" },		
+		{ "label": "Detection Action Plan", "view": "text", "name": "detection_act" },
         {
 			"cols": [
 				{ "label": "Responsible Person's Name", "view": "text", "name": "pic" },
@@ -47,8 +47,8 @@ export default class AddActionView extends JetView{
 				{ "view": "label", "gravity": 3 }
 			]
 		},
-        { "label": "Prevention Action Taken", "view": "text", "name": "prevention_act" },		
-		{ "label": "Detection Action Taken", "view": "text", "name": "detection_act" },
+        { "label": "Prevention Action Taken", "view": "text", "name": "prevention" },		
+		{ "label": "Detection Action Taken", "view": "text", "name": "detection" },
         {
 			"cols": [
 				{ "label": "Completion Date", "view": "datepicker", "name": "finish_date" },
@@ -88,9 +88,9 @@ export default class AddActionView extends JetView{
                         $$("btn_save_action").enable(); 
                         $$("btn_new_action").disable();                         
                         var Select_mode = $$("tbl_currents_all").getSelectedItem();
-                        var mode_id = Select_mode['id'];
+                        var mode_id = Select_mode['mode_id'];
                         var mode_name = Select_mode['mode'];
-                        var current_id = Select_mode['current_id'];
+                        var current_id = Select_mode['id'];
                         var element_name = Select_mode['element'];
                         var cause_name = Select_mode['cause'];
                         $$("id_mode").setValue(mode_id);  
@@ -106,7 +106,7 @@ export default class AddActionView extends JetView{
                 { id:"btn_save_action","view": "button", "css": "webix_primary", "label": "Save",
                     click:()=>{                                               
                         var Select_mode = $$("tbl_currents_all").getSelectedItem();
-                        var mode_id = Select_mode['id'];
+                        var mode_id = Select_mode['mode_id'];
                         var data = $$("form_action").getValues(); 
                         webix.confirm("Do you wont to save data ?").then(function(result){
                             webix.ajax().post("actions/save", data).then(() => {
@@ -134,9 +134,9 @@ export default class AddActionView extends JetView{
         this.getRoot().show();                
                             
         var Select_mode = $$("tbl_currents_all").getSelectedItem();
-        var mode_id = Select_mode['id'];
+        var mode_id = Select_mode['mode_id'];
         var mode_name = Select_mode['mode'];
-        var current_id = Select_mode['current_id'];
+        var current_id = Select_mode['id'];
         var element_name = Select_mode['element'];
         var cause_name = Select_mode['cause'];
         $$("id_mode").setValue(mode_id);  

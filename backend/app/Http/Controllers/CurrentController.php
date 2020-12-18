@@ -34,18 +34,18 @@ class CurrentController extends Controller
         $data->delete();
     }
 
-    public function indexAll(){
+    public function indexAll($id){
         $data = Process::select(
             'processes.name as item',
             'steps.name as step',
-            'modes.id as id',
+            'modes.id as mode_id',
             'modes.name as mode',
             'modes.category as category',
             'modes.effect_in as in',
             'modes.effect_next as next',
             'modes.effect_end as end',
             'modes.s as s',
-            'currents.id as current_id',
+            'currents.id as id',
             'currents.element as element',
             'currents.cause as cause',
             'currents.prevention as prevention',
@@ -58,6 +58,7 @@ class CurrentController extends Controller
             ->Join('modes', 'modes.step_id', '=', 'steps.id')
             ->Join('currents', 'currents.mode_id', '=', 'modes.id')
             ->orderBy('processes.id','asc')
+            ->where('processes.product_id',$id)
             ->get();
         return response()->json($data);
     }

@@ -77,7 +77,7 @@ export default class OptimizationView extends JetView{
                             id:"tbl_currents_all",
                             "columns": [
                                 { id:"id", hidden:true},
-                                { id:"current_id", hidden:true},
+                                { id:"mode_id", hidden:true},
                                 { "id": "item", "header": "Process Item",  "fillspace": false, "hidden": false },
                                 { "id": "step", "header": "Process Step", "fillspace": false, "hidden": false },
                                 { "id": "mode", "header": "Failure Mode (FM)", "fillspace": false, "hidden": false },
@@ -162,7 +162,7 @@ export default class OptimizationView extends JetView{
                                 { id:"element", hidden:true},
                                 { "id": "cause", editor:"text", "header": "Failure Cause (FC)", "fillspace": false, "sort": "string", "hidden": true, "width": 200 },
                                 {
-                                    "id": "prevention",editor:"text", 
+                                    "id": "prevention_act",editor:"text", 
                                     "header": "Prevention Action Plan",
                                     "sort": "string",
                                     "fillspace": false,
@@ -170,7 +170,7 @@ export default class OptimizationView extends JetView{
                                     "width": 250
                                 },
                                 {
-                                    "id": "detection",editor:"text", 
+                                    "id": "detection_act",editor:"text", 
                                     "header": "Detection Action Plan",
                                     "sort": "string",
                                     "fillspace": false,
@@ -180,8 +180,8 @@ export default class OptimizationView extends JetView{
                                 { "id": "pic", editor:"text", "header": "Responsible", "sort": "string", "fillspace": false, "hidden": false },
                                 { "id": "target_date",editor:"date",  "header": "Target Date", "sort": "string", "fillspace": false, "hidden": false },
                                 { "id": "status",editor:"select",options:["Open","Closed"], "header": "Status", "sort": "string", "fillspace": false, "hidden": false },
-                                { "id": "prevention_act", editor:"text","header": "Prevention Action Taken", "fillspace": false, "hidden": false, "width": 250 },
-                                { "id": "detection_act", editor:"text","header": "Detection Action Taken", "fillspace": false, "hidden": false, "width": 250 },
+                                { "id": "prevention", editor:"text","header": "Prevention Action Taken", "fillspace": false, "hidden": false, "width": 250 },
+                                { "id": "detection", editor:"text","header": "Detection Action Taken", "fillspace": false, "hidden": false, "width": 250 },
                                 { "id": "finish_date", editor:"date","header": "Completion Date", "fillspace": false, "hidden": false },
                                 //{ "id": "s",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "S", "width": 35, "fillspace": false, "hidden": false },
                                 { "id": "o",editor:"select",options:[1,2,3,4,5,6,7,8,9,10], "header": "O", "width": 35, "fillspace": false, "hidden": false },
@@ -251,9 +251,9 @@ export default class OptimizationView extends JetView{
     urlChange(view, url){
         var id = url[0].params.id;
         $$("form_planning").load("/products/show/"+id);
+        $$("tbl_currents_all").load("/currentsAll/"+id);
     }
     init(){
-        $$("tbl_currents_all").load("/currentsAll");
         $$("tbl_action_all").load("/actions");
         this.winAction = this.ui(AddActionView); 
     }

@@ -8,8 +8,18 @@ use Illuminate\Http\Request;
 
 class ModeController extends Controller
 {
-    public function index(){
-        $data = Mode::all();
+    // public function index(){
+    //     $data = Mode::all();
+    //     return response()->json($data);
+    // }
+
+    public function index($id){
+        $data = Process::select('modes.*')
+            ->Join('steps', 'steps.process_id', '=', 'processes.id')
+            ->Join('modes', 'modes.step_id', '=', 'steps.id')
+            ->orderBy('steps.id','asc')
+            ->where('processes.product_id',$id)
+            ->get();
         return response()->json($data);
     }
 
@@ -34,7 +44,7 @@ class ModeController extends Controller
         $data->delete();
     }
 
-    public function indexAll(){
+    public function indexAll($id){
         $data = Process::select(
             'processes.name as item',
             'steps.name as step',
@@ -48,6 +58,7 @@ class ModeController extends Controller
             )->Join('steps', 'steps.process_id', '=', 'processes.id')
             ->Join('modes', 'modes.step_id', '=', 'steps.id')
             ->orderBy('steps.id','asc')
+            ->where('processes.product_id',$id)
             ->get();
         return response()->json($data);
     }

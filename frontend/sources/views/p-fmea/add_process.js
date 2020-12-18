@@ -6,7 +6,7 @@ export default class AddProcessView extends JetView{
             view:"popup",
             position:"center",
             width:900,
-            height:300,
+            height:350,
             select:true,
             body:{
                 type:"wide", rows:[

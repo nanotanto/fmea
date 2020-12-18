@@ -13,7 +13,7 @@ class ActionController extends Controller
     }
 
     public function show($id){
-        $data = Action::where("mode_id",$id)->get();
+        $data = Action::where("current_id",$id)->get();
         return response()->json($data);
     }
 
